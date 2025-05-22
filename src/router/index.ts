@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AppLayout from '@/components/layout/AppLayout.vue'
 import IndexView from '@/views/IndexView.vue'
+import { useTokenStore } from '@/stores/mytoken'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -13,6 +15,10 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: AppLayout,
+      meta: {
+        title: '首页',
+        requiresAuth: true,
+      },
       children: [
         {
           path: '',
@@ -22,17 +28,21 @@ const router = createRouter({
         {
           path: '/about',
           name: 'about',
-          // route level code-splitting
-          // this generates a separate chunk (About.[hash].js) for this route
-          // which is lazy-loaded when the route is visited.
           component: () => import('../views/AboutView.vue'),
+        },
+        {
+          path: '/menus',
+          name: 'menus',
+          component: () => import('@/views/menu/MenuIndex.vue'),
+        },
+        {
+          path: '/menus/create',
+          name: 'menu-create',
+          component: () => import('@/views/menu/CreateOrendit.vue'),
         },
         {
           path: '/:xxx(.*)*',
           name: 'ErrorPage',
-          // route level code-splitting
-          // this generates a separate chunk (About.[hash].js) for this route
-          // which is lazy-loaded when the route is visited.
           component: () => import('../views/ErrorPage.vue'),
         },
       ],
@@ -40,4 +50,14 @@ const router = createRouter({
   ],
 })
 
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((r) => r.meta?.requiresAuth)) {
+    const store = useTokenStore()
+    if (!store.token?.access_token) {
+      next({ name: 'login', query: { redirect: to.fullPath } })
+      return
+    }
+  }
+  next()
+})
 export default router
