@@ -1,24 +1,22 @@
 <script setup lang="ts">
 import { isCollapse } from './isCollapse'
-import { getUserInfo, logout } from '@/api/users'
+import { ref } from 'vue'
+import { ElMessage } from 'element-plus'
 import { useTokenStore } from '@/stores/mytoken'
 import { useRouter } from 'vue-router'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import { ref } from 'vue'
+import { getUserInfo, logout } from '@/api/users'
+
 const router = useRouter()
+const dialogVisible = ref(false)
 const userInfo = ref({ portrait: '', userName: '' })
+
+// 获取用户信息
 getUserInfo().then((res) => {
   userInfo.value = res.data.content
 })
+
+// 退出登录
 const handleLogout = async () => {
-  await ElMessageBox.confirm('是否退出登录？', '提示询问', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning',
-  }).catch(() => {
-    ElMessage.error('已取消')
-    return new Promise(() => {})
-  })
   await logout().catch(() => {})
   ElMessage.success('退出成功')
   useTokenStore().saveToken()
@@ -52,7 +50,16 @@ const handleLogout = async () => {
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item>{{ userInfo.userName }}</el-dropdown-item>
-          <el-dropdown-item divided @click="handleLogout">退出</el-dropdown-item>
+          <el-dropdown-item divided @click="dialogVisible = true">退出</el-dropdown-item>
+          <el-dialog v-model="dialogVisible" title="提示询问" width="500">
+            <span>是否退出登录？</span>
+            <template #footer>
+              <div class="dialog-footer">
+                <el-button @click="dialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="handleLogout">确定</el-button>
+              </div>
+            </template>
+          </el-dialog>
         </el-dropdown-menu>
       </template>
     </el-dropdown>

@@ -2,11 +2,12 @@
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import { reactive, ref } from 'vue'
 import { login } from '@/api/users'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useTokenStore } from '@/stores/mytoken'
-const form = reactive({ name: '123', password: '123' })
+const form = reactive({ name: 'cui', password: '123456' })
 const store = useTokenStore()
 const router = useRouter()
+const route = useRoute()
 const rules = reactive<FormRules>({
   name: [
     {
@@ -15,8 +16,8 @@ const rules = reactive<FormRules>({
       trigger: 'blur',
     },
     {
-      pattern: /^[a-zA-Z0-9_-]{4,16}$/,
-      message: '账号必须是4-16位数字和字母组合',
+      pattern: /^[a-zA-Z0-9_-]{3,16}$/,
+      message: '账号必须是3-16位数字和字母组合',
       trigger: 'blur',
     },
   ],
@@ -53,7 +54,7 @@ const onSubmit = async () => {
   store.saveToken(data.content)
   isLoading.value = false
   ElMessage.success('登录成功')
-  router.push('/')
+  router.push((route.query.redirect as string) || '/')
 }
 const isLoading = ref(false)
 const formRef = ref<FormInstance>()

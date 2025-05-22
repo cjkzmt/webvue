@@ -72,6 +72,16 @@ import { isCollapse } from './isCollapse'
             <el-menu-item index="3-4-1">Option 4-1</el-menu-item>
           </el-sub-menu>
         </el-sub-menu>
+        <el-sub-menu index="6">
+          <template #title>
+            <el-icon><IEpSetUp /></el-icon><span>权限管理</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="/menus">菜单管理</el-menu-item>
+            <el-menu-item index="2-2">租金</el-menu-item>
+            <el-menu-item index="2-2">工资</el-menu-item>
+          </el-menu-item-group>
+        </el-sub-menu>
       </el-menu>
     </el-scrollbar>
   </el-aside>
