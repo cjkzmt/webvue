@@ -1,9 +1,33 @@
 <script setup lang="ts">
 import { isCollapse } from './isCollapse'
+import { getUserInfo, logout } from '@/api/users'
+import { useTokenStore } from '@/stores/mytoken'
+import { useRouter } from 'vue-router'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { ref } from 'vue'
+const router = useRouter()
+const userInfo = ref({ portrait: '', userName: '' })
+getUserInfo().then((res) => {
+  userInfo.value = res.data.content
+})
+const handleLogout = async () => {
+  await ElMessageBox.confirm('是否退出登录？', '提示询问', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  }).catch(() => {
+    ElMessage.error('已取消')
+    return new Promise(() => {})
+  })
+  await logout().catch(() => {})
+  ElMessage.success('退出成功')
+  useTokenStore().saveToken()
+  router.push({ name: 'login' })
+}
 </script>
 
 <template>
-  <el-header style="text-align: right; font-size: 12px">
+  <el-header>
     <el-icon @click="isCollapse = !isCollapse">
       <IEpExpand v-show="isCollapse" />
       <IEpFold v-show="!isCollapse" />
@@ -20,15 +44,15 @@ import { isCollapse } from './isCollapse'
 
     <el-dropdown>
       <span class="el-dropdown-link">
-        <el-avatar :size="50" :src="'@/assets/logo.svg'" />
+        <el-avatar :size="32" :src="userInfo.portrait" />
         <el-icon class="el-icon--right">
           <IEparrow-down />
         </el-icon>
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item>用户名</el-dropdown-item>
-          <el-dropdown-item divided>推出</el-dropdown-item>
+          <el-dropdown-item>{{ userInfo.userName }}</el-dropdown-item>
+          <el-dropdown-item divided @click="handleLogout">退出</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
