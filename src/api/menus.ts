@@ -33,17 +33,37 @@ export const getAll = () => {
 }
 
 // type CreateOrEnditMenu = Partial<MenuItem>
-type CreateOrEnditMenu = Pick<
+export type CreateOrEnditMenu = Pick<
   MenuItem,
-  'id' | 'parentId' | 'name' | 'href' | 'icon' | 'orderNum' | 'description' | 'show'
+  'parentId' | 'name' | 'href' | 'icon' | 'orderNum' | 'description' | 'show'
 > & { id?: number }
 export const saveOrUpdate = (menuInfo: CreateOrEnditMenu) => {
-  return request<Common<MenuItem>>({
+  return request<Common<boolean>>({
     method: 'POST',
     url: '/api/menu/saveOrUpdate',
     data: menuInfo,
   }).catch((error) => {
     console.error('添加菜单信息失败', error)
     throw new Error('添加菜单信息失败')
+  })
+}
+
+export const deleteMenu = (id: number) => {
+  return request<Common<boolean>>({
+    method: 'DELETE',
+    url: `/api/menu/${id}`,
+  }).catch((error) => {
+    console.error('删除菜单信息失败', error)
+    throw new Error('删除菜单信息失败')
+  })
+}
+
+export const getEditMenuInfo = (id: number) => {
+  return request<Common<MenuItem>>({
+    method: 'GET',
+    url: `/api/menu/${id}`,
+  }).catch((error) => {
+    console.error('获取菜单信息失败', error)
+    throw new Error('获取菜单信息失败')
   })
 }
