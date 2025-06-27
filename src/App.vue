@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import request from './utils/request'
+import { zhCn } from 'element-plus/es/locales.mjs'
 request({
   method: 'GET',
   url: '/api',
@@ -10,7 +11,9 @@ request({
 </script>
 
 <template>
-  <RouterView />
+  <el-config-provider :locale="zhCn">
+    <RouterView />
+  </el-config-provider>
 </template>
 
 <style scoped>

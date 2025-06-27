@@ -2,6 +2,7 @@ import axios, { type AxiosRequestHeaders } from 'axios'
 import { useTokenStore } from '@/stores/mytoken'
 import { refreshToken } from '@/api/users'
 import router from '@/router/index'
+import { ElMessage } from 'element-plus'
 const request = axios.create({
   // baseURL: import.meta.env.VITE_BASE_URL,
 })
@@ -29,6 +30,9 @@ request.interceptors.response.use(
         router.push({ name: 'login' })
         return
       }
+    } else if (error.response?.status === 403) {
+      ElMessage.error('当前操作权限不足')
+      return { data: { code: '123456' } }
     }
     return Promise.reject(error)
   },

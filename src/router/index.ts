@@ -38,7 +38,98 @@ const router = createRouter({
         {
           path: '/menus/create',
           name: 'menu-create',
-          component: () => import('@/views/menu/CreateOrendit.vue'),
+          component: () => import('@/views/menu/CreateOrEndit.vue'),
+        },
+        {
+          path: '/menus/:id/edit',
+          name: 'menu-edit',
+          component: () => import('@/views/menu/CreateOrEndit.vue'),
+        },
+        {
+          path: '/users',
+          name: 'users',
+          component: () => import('@/views/users/UserIndex.vue'),
+        },
+        {
+          path: '/authors',
+          name: 'authors',
+          component: () => import('@/views/authors/AuthorIdex.vue'),
+        },
+        {
+          path: '/urltexts',
+          name: 'urltexts',
+          component: () => import('@/views/urltext/UrlTextIdex.vue'),
+        },
+        {
+          path: '/accounts',
+          name: 'accounts',
+          component: () => import('@/views/accounts/AccountIdex.vue'),
+        },
+        {
+          path: '/certifiers',
+          name: 'certifiers',
+          component: () => import('@/views/certifiers/CertifierIdex.vue'),
+        },
+        {
+          path: '/fans',
+          name: 'fans',
+          component: () => import('@/views/fans/FansIdex.vue'),
+        },
+        {
+          path: '/leads',
+          name: 'leads',
+          component: () => import('@/views/leads/LeadIdex.vue'),
+        },
+        {
+          path: '/pc',
+          name: 'pc',
+          component: () => import('@/views/pc/PCIdex.vue'),
+        },
+        {
+          path: '/phonenumber',
+          name: 'phonenumber',
+          component: () => import('@/views/phonenumber/PNumberIdex.vue'),
+        },
+        {
+          path: '/phones',
+          name: 'phones',
+          component: () => import('@/views/phones/PhoneIdex.vue'),
+        },
+        {
+          path: '/script',
+          name: 'script',
+          component: () => import('@/views/script/ScriptIdex.vue'),
+        },
+
+        {
+          path: '/tasksettings',
+          name: 'tasksettings',
+          component: () => import('@/views/tasksettings/TaskSettings.vue'),
+        },
+        {
+          path: '/video',
+          name: 'video',
+          component: () => import('@/views/video/VideoIdex.vue'),
+        },
+        {
+          path: '/videotask',
+          name: 'videotask',
+          component: () => import('@/views/videotask/VideoTaskIndex.vue'),
+        },
+        {
+          path: '/certifiers',
+          name: 'certifiers',
+          component: () => import('@/views/certifiers/CertifierIdex.vue'),
+        },
+        {
+          path: '/otherinfo',
+          name: 'otherinfo',
+          component: () => import('@/views/otherinfo/OtherInfoIdex.vue'),
+        },
+        {
+          path: '/resource-category',
+          name: 'resource-category',
+          component: () => import('@/views/resource-category/ResourceCategoryIndex.vue'),
         },
         {
           path: '/:xxx(.*)*',
