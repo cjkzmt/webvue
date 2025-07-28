@@ -2,18 +2,40 @@ import {
   saveOrUpdate,
   getCertifierPages,
   deleteCertifier,
+  getTopCertifiers,
+  enableCertifier, forbidCertifier,
+  type TopCertifiers,
   type QueryCondition,
   type QueryResult,
 } from '@/api/certifiers'
 import { reactive, ref } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
-export const form = reactive({
+import { ElMessage } from 'element-plus'
+import { type FormInstance } from 'element-plus'
+export const forminstance = ref<FormInstance>()
+const isCreate = ref(true)
+const formInitialValues = {
+  id: 0,
   name: '',
   idnumber: 0,
   Owner: '',
-})
+}
+export const form = reactive({...formInitialValues})
 
-export const isCreate = ref(true)
+export const initAndShow = (id = 0) => {
+  if (id) {
+    isCreate.value = false
+    msgText.value = '更新'
+    const variable = queriedResult.value.records.find((item) => item.id === id)
+    Object.assign(form, {...variable})
+  } else {
+    isCreate.value = true
+    msgText.value = '创建'
+    Object.assign(form, formInitialValues)
+  }
+  forminstance.value?.clearValidate()
+  dialogFormVisible.value = true
+}
+
 export const msgText = ref('')
 //提交按钮
 export const onSubmit = async () => {
@@ -48,21 +70,24 @@ export const queryCertifier = async (params?: QueryCondition) => {
   }
 }
 
-export const handleDelete = async (id: number) => {
-  await ElMessageBox.confirm('此操作将永久删除该认证人, 是否继续?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning',
-  }).catch(() => {
-    ElMessage.info('已取消删除')
-    return new Promise(() => {})
-  })
-  const { data } = await deleteCertifier(id)
-  if (data.code === '000000') {
-    ElMessage.success('删除认证人成功')
-    queryCertifier()
-  } else {
-    ElMessage.error('删除认证人失败')
-    throw new Error('删除认证人失败')
+export const topCertifiers = ref([] as TopCertifiers[])
+export const fetchTopCertifiers = async () => {
+  try {
+    const { data } = await getTopCertifiers()
+    topCertifiers.value = data.data
+  } catch (error) {
+    console.error('获取手机列表失败:', error)
   }
 }
+const distext = ref('账号组')
+import {createHandler ,createDeleteHandler } from '@/utils/Common'
+export const handleDelete = createDeleteHandler({
+  deleteFn: deleteCertifier,
+  refresh: queryCertifier,
+  getDisplayName: () => distext.value
+})
+export const handleStatusChange = createHandler(
+  enableCertifier,
+  forbidCertifier,
+  queryCertifier
+)

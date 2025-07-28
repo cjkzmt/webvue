@@ -1,36 +1,15 @@
 <script setup lang="ts">
-import { queriedResult, queryCondition, queryAccount, handleDelete } from '@/composables/useAccount'
-import { enableAccount, forbidAccount } from '@/api/accounts'
+
+
 import { timeFormatter } from '@/utils/timeHandler'
-import { ElMessage } from 'element-plus'
-import { ref, watch } from 'vue'
+import { ref} from 'vue'
+import { queriedResult, queryCondition, queryAccount, handleDelete ,handleStatusChange} from '@/composables/useAccount'
 import DlgAccountCreateOrEdit from './DlgAccountCreateOrEdit.vue'
 queryAccount()
 const dlgCreateOrEdit = ref<InstanceType<typeof DlgAccountCreateOrEdit>>()
-const handleStatusChange = async (act: 'ENABLE' | 'DISABLE', userId: number) => {
-  const action = {
-    ENABLE: { msg: '启用', fn: enableAccount },
-    DISABLE: { msg: '禁用', fn: forbidAccount },
-  }
-  const { data } = await action[act].fn(userId)
-  if (data.code === '000000') {
-    ElMessage.success(`${action[act].msg}成功`)
-    queryAccount()
-  } else {
-    ElMessage.error(`${action[act].msg}失败`)
-    throw new Error(`${action[act].msg}失败`)
-  }
-}
-const timeRange = ref('')
-watch(timeRange, (newTime) => {
-  if (Array.isArray(newTime)) {
-    queryCondition.value.statCreateTime = newTime[0]?.toISOString()
-    queryCondition.value.endCreateTime = newTime[1]?.toISOString()
-  } else {
-    queryCondition.value.statCreateTime = ''
-    queryCondition.value.endCreateTime = ''
-  }
-})
+import { createTimeRangeWatcher } from '@/utils/Common'
+const timeRange = ref<[Date, Date] | ''>('')
+createTimeRangeWatcher(queryCondition)(timeRange)
 </script>
 
 <template>
@@ -68,9 +47,8 @@ watch(timeRange, (newTime) => {
     </template>
     <el-table :data="queriedResult.records" border style="width: 100%">
       <el-table-column type="index" label="序号" width="60" align="center" />
-      <el-table-column prop="Phone" label="手机" width="80" align="center" />
+      <el-table-column prop="AccountTeam" label="组号" width="60" align="center" />
       <el-table-column prop="Platform" label="平台" width="80" align="center" />
-      <el-table-column prop="team" label="组号" width="60" align="center" />
       <el-table-column prop="name" label="账号名" width="180" align="center" />
       <el-table-column prop="number" label="ID号" width="180" align="center" />
       <el-table-column prop="profile" label="简介" width="180" align="center" />

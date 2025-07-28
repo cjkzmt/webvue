@@ -1,10 +1,6 @@
 import request from '@/utils/request'
-type Common<T> = {
-  code: string
-  data: T
-  mesg: string
-  time: string
-}
+import type {Common } from '@/utils/QueryResult'
+
 export type TypeTextItem = {
   id: number
   name: string
@@ -107,3 +103,5 @@ export const forbidStatus = (id: number) => {
     },
   })
 }
+
+

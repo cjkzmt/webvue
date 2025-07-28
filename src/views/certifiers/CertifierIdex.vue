@@ -3,39 +3,16 @@ import {
   queriedResult,
   queryCondition,
   queryCertifier,
-  handleDelete,
+  handleDelete,handleStatusChange
 } from '@/composables/useCertifier'
-import { enableCertifier, forbidCertifier } from '@/api/certifiers'
 import { timeFormatter } from '@/utils/timeHandler'
-import { ElMessage } from 'element-plus'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import DlgCertifierCreateOrEdit from './DlgCertifierCreateOrEdit.vue'
 queryCertifier()
 const dlgCreateOrEdit = ref<InstanceType<typeof DlgCertifierCreateOrEdit>>()
-const handleStatusChange = async (act: 'ENABLE' | 'DISABLE', userId: number) => {
-  const action = {
-    ENABLE: { msg: '启用', fn: enableCertifier },
-    DISABLE: { msg: '禁用', fn: forbidCertifier },
-  }
-  const { data } = await action[act].fn(userId)
-  if (data.code === '000000') {
-    ElMessage.success(`${action[act].msg}成功`)
-    queryCertifier()
-  } else {
-    ElMessage.error(`${action[act].msg}失败`)
-    throw new Error(`${action[act].msg}失败`)
-  }
-}
-const timeRange = ref('')
-watch(timeRange, (newTime) => {
-  if (Array.isArray(newTime)) {
-    queryCondition.value.statCreateTime = newTime[0]?.toISOString()
-    queryCondition.value.endCreateTime = newTime[1]?.toISOString()
-  } else {
-    queryCondition.value.statCreateTime = ''
-    queryCondition.value.endCreateTime = ''
-  }
-})
+import { createTimeRangeWatcher } from '@/utils/Common'
+const timeRange = ref<[Date, Date] | ''>('')
+createTimeRangeWatcher(queryCondition)(timeRange)
 </script>
 
 <template>

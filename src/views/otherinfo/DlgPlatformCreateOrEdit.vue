@@ -1,38 +1,18 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import {
-  isCreate,
+  forminstance,
   onSubmit,
   form,
   msgText,
   dialogFormVisible,
-  allPlatform,
-} from '@/composables/usePlatform'
-import { type FormInstance } from 'element-plus'
-const formLabelWidth = '140px'
-const initAndShow = (id = 0) => {
-  fmPlatform.value?.resetFields()
-  dialogFormVisible.value = true
-  if (id) {
-    isCreate.value = false
-    msgText.value = '更新'
-    const Platform = allPlatform.value.find((item) => item.id === id)
-    Object.assign(form, Platform)
-  } else {
-    isCreate.value = true
-    msgText.value = '创建'
-  }
-}
-
-const fmPlatform = ref<FormInstance>()
-defineExpose({
   initAndShow,
-})
+} from '@/composables/usePlatform'
+const formLabelWidth = '140px'
+defineExpose({initAndShow})
 </script>
-
 <template>
   <el-dialog v-model="dialogFormVisible" :title="msgText + '平台'" width="500">
-    <el-form :model="form" ref="fmPlatform">
+    <el-form :model="form" ref="forminstance">
       <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
         <el-input v-model="form.name" autocomplete="off" />
       </el-form-item>

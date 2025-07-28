@@ -1,24 +1,37 @@
-import { getAll, saveOrUpdate, deletePlatform, type PlatformItem } from '@/api/platform'
+import { getAll, saveOrUpdate, deletePlatform, enablepublish,forbidpublish,type PlatformItem } from '@/api/platform'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref } from 'vue'
 //保存数据
 export const allPlatform = ref([] as PlatformItem[])
-//获取所有资源分类
+//获取所有平台
 export const getAllPlatform = async () => {
   const { data } = await getAll()
   if (data.code === '000000') {
     allPlatform.value = data.data
   } else {
-    ElMessage.error('获取资源分类信息失败')
-    throw new Error('获取资源分类信息失败')
+    ElMessage.error('获取平台信息失败')
+    throw new Error('获取平台信息失败')
   }
 }
-
+import { type FormInstance } from 'element-plus'
+export const forminstance = ref<FormInstance>()
 export const form = reactive({
   name: '',
   sort: 0,
 })
-
+export const initAndShow = (id = 0) => {
+  forminstance.value?.resetFields()
+  dialogFormVisible.value = true
+  if (id) {
+    isCreate.value = false
+    msgText.value = '更新'
+    const TypeVideo = allPlatform.value.find((item) => item.id === id)
+    Object.assign(form, TypeVideo)
+  } else {
+    isCreate.value = true
+    msgText.value = '创建'
+  }
+}
 export const isCreate = ref(true)
 export const msgText = ref('')
 //提交按钮
@@ -52,3 +65,15 @@ export const DeletePlatform = async (id: number) => {
     throw new Error('删除平台失败')
   }
 }
+const distext = ref('账号组')
+import {createHandler ,createDeleteHandler } from '@/utils/Common'
+export const handleDelete = createDeleteHandler({
+  deleteFn: deletePlatform,
+  refresh: getAllPlatform,
+  getDisplayName: () => distext.value
+})
+export const handlepublishChange = createHandler(
+  enablepublish,forbidpublish,
+  getAllPlatform
+)
+

@@ -1,38 +1,18 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import {
-  isCreate,
+  forminstance,
   onSubmit,
   form,
   msgText,
   dialogFormVisible,
-  allReleasePlan,
-} from '@/composables/useReleasePlan'
-import { type FormInstance } from 'element-plus'
-const formLabelWidth = '140px'
-const initAndShow = (id = 0) => {
-  fmReleasePlan.value?.resetFields()
-  dialogFormVisible.value = true
-  if (id) {
-    isCreate.value = false
-    msgText.value = '更新'
-    const ReleasePlan = allReleasePlan.value.find((item) => item.id === id)
-    Object.assign(form, ReleasePlan)
-  } else {
-    isCreate.value = true
-    msgText.value = '创建'
-  }
-}
-
-const fmReleasePlan = ref<FormInstance>()
-defineExpose({
   initAndShow,
-})
+} from '@/composables/useReleasePlan'
+const formLabelWidth = '140px'
+defineExpose({initAndShow})
 </script>
-
 <template>
   <el-dialog v-model="dialogFormVisible" :title="msgText + '平台'" width="500">
-    <el-form :model="form" ref="fmReleasePlan">
+    <el-form :model="form" ref="forminstance">
       <el-form-item label="时" :label-width="formLabelWidth" prop="hour">
         <el-input v-model="form.hour" autocomplete="off" />
       </el-form-item>

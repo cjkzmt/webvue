@@ -1,36 +1,14 @@
 <script setup lang="ts">
-import { queriedResult, queryCondition, queryAuthor, handleDelete } from '@/composables/useAuthor'
-import { enableAuthor, forbidAuthor } from '@/api/authors'
+import { queriedResult, queryCondition, queryAuthor, handleDelete,handleStatusChange } from '@/composables/useAuthor'
 import { timeFormatter } from '@/utils/timeHandler'
-import { ElMessage } from 'element-plus'
-import { ref, watch } from 'vue'
+import { ref, } from 'vue'
 import DlgAuthorCreateOrEdit from './DlgAuthorCreateOrEdit.vue'
 queryAuthor()
 const dlgCreateOrEdit = ref<InstanceType<typeof DlgAuthorCreateOrEdit>>()
-const handleStatusChange = async (act: 'ENABLE' | 'DISABLE', userId: number) => {
-  const action = {
-    ENABLE: { msg: '启用', fn: enableAuthor },
-    DISABLE: { msg: '禁用', fn: forbidAuthor },
-  }
-  const { data } = await action[act].fn(userId)
-  if (data.code === '000000') {
-    ElMessage.success(`${action[act].msg}成功`)
-    queryAuthor()
-  } else {
-    ElMessage.error(`${action[act].msg}失败`)
-    throw new Error(`${action[act].msg}失败`)
-  }
-}
-const timeRange = ref('')
-watch(timeRange, (newTime) => {
-  if (Array.isArray(newTime)) {
-    queryCondition.value.statCreateTime = newTime[0]?.toISOString()
-    queryCondition.value.endCreateTime = newTime[1]?.toISOString()
-  } else {
-    queryCondition.value.statCreateTime = ''
-    queryCondition.value.endCreateTime = ''
-  }
-})
+
+import { createTimeRangeWatcher } from '@/utils/Common'
+const timeRange = ref<[Date, Date] | ''>('')
+createTimeRangeWatcher(queryCondition)(timeRange)
 </script>
 
 <template>

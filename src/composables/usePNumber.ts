@@ -2,21 +2,42 @@ import {
   saveOrUpdate,
   getPNumberPages,
   deletePNumber,
+  getTopPNumbers,enablePNumber, forbidPNumber,
+  type TopPNumbers,
   type QueryCondition,
   type QueryResult,
 } from '@/api/pnumbers'
 import { reactive, ref } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
-
-export const form = reactive({
+import { ElMessage } from 'element-plus'
+import { type FormInstance } from 'element-plus'
+export const forminstance = ref<FormInstance>()
+const isCreate = ref(true)
+const formInitialValues = {
+  id: 0,
   number: 1,
+  code:0,
   rent: 0,
   Owner: '',
   PhoneId: -1,
   Phone: '',
-})
+}
+export const form = reactive({...formInitialValues})
 
-export const isCreate = ref(true)
+export const initAndShow = (id = 0) => {
+  if (id) {
+    isCreate.value = false
+    msgText.value = '更新'
+    const variable = queriedResult.value.records.find((item) => item.id === id)
+    Object.assign(form, {...variable})
+  } else {
+    isCreate.value = true
+    msgText.value = '创建'
+    Object.assign(form, formInitialValues)
+  }
+  forminstance.value?.clearValidate()
+  dialogFormVisible.value = true
+}
+
 export const msgText = ref('')
 //提交按钮
 export const onSubmit = async () => {
@@ -51,21 +72,25 @@ export const queryPNumber = async (params?: QueryCondition) => {
   }
 }
 
-export const handleDelete = async (id: number) => {
-  await ElMessageBox.confirm('此操作将永久删除该手机号, 是否继续?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning',
-  }).catch(() => {
-    ElMessage.info('已取消删除')
-    return new Promise(() => {})
-  })
-  const { data } = await deletePNumber(id)
-  if (data.code === '000000') {
-    ElMessage.success('删除手机号成功')
-    queryPNumber()
-  } else {
-    ElMessage.error('删除手机号失败')
-    throw new Error('删除手机号失败')
+export const topPNumbers = ref([] as TopPNumbers[])
+export const fetchTopPNumbers = async () => {
+  try {
+    const { data } = await getTopPNumbers()
+    topPNumbers.value = data.data
+  } catch (error) {
+    console.error('获取手机列表失败:', error)
   }
 }
+
+const distext = ref('账号组')
+import {createHandler ,createDeleteHandler } from '@/utils/Common'
+export const handleDelete = createDeleteHandler({
+  deleteFn: deletePNumber,
+  refresh: queryPNumber,
+  getDisplayName: () => distext.value
+})
+export const handleStatusChange = createHandler(
+  enablePNumber,
+  forbidPNumber,
+  queryPNumber
+)

@@ -1,31 +1,16 @@
 import request from '@/utils/request'
-type Common<T> = {
-  code: string
-  data: T
-  mesg: string
-  time: string
-}
-
-type certifierItem = {
+import type {Common ,Result} from '@/utils/QueryResult'
+export type TopCertifiers = {
   id: number // 手机的唯一标识符（手机ID）
   name: string // 手机的名称或手机名
+}
+type certifierItem =TopCertifiers& {
   idnumber: number // 手机所属的型号
   Owner: string // 手机的拥有者或使用者
   createdTime: string // 手机创建时间，格式通常为日期时间字符串，例如 "2025-06-13T10:00:00Z"
   status: 'ENABLE' | 'DISABLE' // 手机的状态，取值为 "ENABLE" 或 "DISABLE"
 }
-export type QueryResult = {
-  current: number // 当前页码
-  hitcount: boolean // 是否命中计数，用于分页查询时是否统计总记录数
-  optimizeCountSql: boolean // 是否优化计数SQL，用于分页查询性能优化
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  orders: any[] // 排序条件数组，具体结构根据实际需求定义
-  pages: number // 总页数
-  records: certifierItem[] // 当前页的手机记录列表
-  searchCount: boolean // 是否进行搜索计数，用于分页查询时是否统计总记录数
-  size: number // 每页显示的记录数
-  total: number // 总记录数
-}
+export type QueryResult = Result<certifierItem[]>
 export type QueryCondition = Partial<{
   currentPage: number // 查询的当前页码
   pageSize: number // 每页显示的记录数
@@ -86,11 +71,6 @@ export const forbidCertifier = (certifierId: number) => {
     },
   })
 }
-export type TopCertifiers = {
-  id: number // 手机的唯一标识符（手机ID）
-  name: string // 手机的名称或手机名
-}
-
 export const getTopCertifiers = () => {
   return request<Common<TopCertifiers[]>>({
     method: 'GET',

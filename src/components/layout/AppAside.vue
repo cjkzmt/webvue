@@ -10,8 +10,7 @@ import { isCollapse } from './isCollapse'
           <a href="/" class="logo">
             <img src="@/assets/logo.svg" />
             <h1>新媒体大师</h1>
-          </a></el-menu-item
-        >
+          </a></el-menu-item>
         <el-sub-menu index="1">
           <template #title>
             <el-icon><IEpDataLine /></el-icon><span>项目数据</span>
@@ -19,47 +18,67 @@ import { isCollapse } from './isCollapse'
           <el-menu-item-group>
             <el-menu-item index="/leads">意向用户</el-menu-item>
             <el-menu-item index="/fans">粉丝数据</el-menu-item>
-            <!-- <el-menu-item index="1-1">综合数据</el-menu-item> -->
-            <!-- <el-menu-item index="1-2">视频数据</el-menu-item>
-            <el-menu-item index="1-2">文案数据</el-menu-item> -->
           </el-menu-item-group>
         </el-sub-menu>
         <el-sub-menu index="2">
           <template #title>
-            <el-icon><IEpManagement /></el-icon><span>项目任务</span>
+            <el-icon><IEpManagement /></el-icon><span>任务文案</span>
           </template>
           <el-menu-item-group>
-            <!-- <el-menu-item index="2-1">综合任务</el-menu-item>
-            <el-menu-item index="2-2">素材任务</el-menu-item> -->
-            <el-menu-item index="/script">文案任务</el-menu-item>
-            <el-menu-item index="/video">视频任务</el-menu-item>
-            <el-menu-item index="/videotask">发布状态</el-menu-item>
-            <el-menu-item index="/tasksettings">任务设置</el-menu-item>
+            <el-menu-item index="/reviewscript">审核-脚本</el-menu-item>
+            <el-menu-item index="/reviewcopy">审核-文案</el-menu-item>
+            <el-menu-item index="/tasks">任务列表</el-menu-item>
+            <el-menu-item index="/script">脚本列表</el-menu-item>
+            <el-menu-item index="/topiccopys">选题样本</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
-
-        <el-sub-menu index="4">
+        <el-sub-menu index="3">
           <template #title>
-            <el-icon><IEpDocument /></el-icon><span>项目文案</span>
-          </template>
+            <el-icon><IEpDocument /></el-icon><span>任务视频</span>
+            </template>
           <el-menu-item-group>
-            <el-menu-item index="/topiccopy">选题样本</el-menu-item>
-            <el-menu-item index="/script">脚本</el-menu-item>
-            <el-menu-item index="/urltexts">链接</el-menu-item>
+            <el-menu-item index="/reviewvideo">视频审核</el-menu-item>
+            <el-menu-item index="/videotask">发布状态</el-menu-item>
+
+            <el-menu-item index="/prompttexts">提示词</el-menu-item>
+            <el-menu-item index="/tasksettings">任务设置</el-menu-item>
             <el-menu-item index="/authors">作者</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
+        <el-sub-menu index="4">
+          <template #title>
+            <el-icon><IEpFilm /></el-icon><span>项目视频</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="/videoclips">视频片段</el-menu-item>
+            <el-menu-item index="/voiceovers">视频配音</el-menu-item>
+            <el-menu-item index="/musics">背景音乐</el-menu-item>
+            <el-menu-item index="/fonts">视频字体</el-menu-item>
+            <el-menu-item index="/videotypeinfo">视频样式</el-menu-item>
+          </el-menu-item-group>
+        </el-sub-menu>
         <el-sub-menu index="5">
+          <template #title>
+            <el-icon><IEpMemo /></el-icon><span>项目矩阵</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="/teamowners">商家列表</el-menu-item>
+             <el-menu-item index="/accountteams">账号组</el-menu-item>
+            <el-menu-item index="/accounts">账号表</el-menu-item>
+            <el-menu-item index="/phones">手机表</el-menu-item>
+            <el-menu-item index="/phonenumber">手机号</el-menu-item>
+            <el-menu-item index="/certifiers">认证人</el-menu-item>
+            <el-menu-item index="/pc">电脑表</el-menu-item>
+          </el-menu-item-group>
+        </el-sub-menu>
+         <el-sub-menu index="6">
           <template #title>
             <el-icon><IEpMemo /></el-icon><span>账号资料</span>
           </template>
           <el-menu-item-group>
             <el-menu-item index="/users">用户管理</el-menu-item>
-            <el-menu-item index="/phones">手机表</el-menu-item>
-            <el-menu-item index="/phonenumber">手机号</el-menu-item>
-            <el-menu-item index="/certifiers">认证人</el-menu-item>
-            <el-menu-item index="/accounts">账号表</el-menu-item>
-            <el-menu-item index="/pc">电脑表</el-menu-item>
+            <el-menu-item index="/tokens">Token表</el-menu-item>
+            <el-menu-item index="/ollamas">Ollama</el-menu-item>
             <el-menu-item index="/OtherInfo">其他资料</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
