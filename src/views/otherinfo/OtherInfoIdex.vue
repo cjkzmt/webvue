@@ -1,74 +1,21 @@
 <script setup lang="ts">
-import { allPlatform, getAllPlatform, DeletePlatform } from '@/composables/usePlatform'
+import { allPlatform, getAllPlatform, DeletePlatform ,handlepublishChange} from '@/composables/usePlatform'
 import { allReleasePlan, getAllReleasePlan, DeleteReleasePlan } from '@/composables/useReleasePlan'
-import { allTypeText, getAllTypeText, DeleteTypeText } from '@/composables/useTypeText'
-import {
-  enabletopic,
-  forbidtopic,
-  enablecopy,
-  forbidcopy,
-  enableStatus,
-  forbidStatus,
-} from '@/api/typetext'
-// import { timeFormatter } from '@/utils/timeHandler'
+import { allTypeText, getAllTypeText, DeleteTypeText, handletopicChange , handlecopyChange, handleStatusChange } from '@/composables/useTypeText'
 import DlgPlatformCreateOrEdit from './DlgPlatformCreateOrEdit.vue'
 import DlgReleasePlanCreateOrEdit from './DlgReleasePlanCreateOrEdit.vue'
 import DlgTypeTextCreateOrEdit from './DlgTypeTextCreateOrEdit.vue'
 import { ref } from 'vue'
-import { ElMessage } from 'element-plus'
 getAllPlatform()
 getAllReleasePlan()
 getAllTypeText()
 const dlgPlatformCreateOrEdit = ref<InstanceType<typeof DlgPlatformCreateOrEdit>>()
 const dlgTypeTextCreateOrEdit = ref<InstanceType<typeof DlgTypeTextCreateOrEdit>>()
 const dlgReleasePlanCreateOrEdit = ref<InstanceType<typeof DlgReleasePlanCreateOrEdit>>()
-
-const handletopicChange = async (act: 'ENABLE' | 'DISABLE', id: number) => {
-  const action = {
-    ENABLE: { msg: '启用', fn: enabletopic },
-    DISABLE: { msg: '禁用', fn: forbidtopic },
-  }
-  const { data } = await action[act].fn(id)
-  if (data.code === '000000') {
-    ElMessage.success(`${action[act].msg}成功`)
-    getAllTypeText()
-  } else {
-    ElMessage.error(`${action[act].msg}失败`)
-    throw new Error(`${action[act].msg}失败`)
-  }
-}
-const handlecopyChange = async (act: 'ENABLE' | 'DISABLE', id: number) => {
-  const action = {
-    ENABLE: { msg: '启用', fn: enablecopy },
-    DISABLE: { msg: '禁用', fn: forbidcopy },
-  }
-  const { data } = await action[act].fn(id)
-  if (data.code === '000000') {
-    ElMessage.success(`${action[act].msg}成功`)
-    getAllTypeText()
-  } else {
-    ElMessage.error(`${action[act].msg}失败`)
-    throw new Error(`${action[act].msg}失败`)
-  }
-}
-const handleStatusChange = async (act: 'ENABLE' | 'DISABLE', id: number) => {
-  const action = {
-    ENABLE: { msg: '启用', fn: enableStatus },
-    DISABLE: { msg: '禁用', fn: forbidStatus },
-  }
-  const { data } = await action[act].fn(id)
-  if (data.code === '000000') {
-    ElMessage.success(`${action[act].msg}成功`)
-    getAllTypeText()
-  } else {
-    ElMessage.error(`${action[act].msg}失败`)
-    throw new Error(`${action[act].msg}失败`)
-  }
-}
 </script>
 
 <template>
-  <el-card class="box-card">
+<el-card class="box-card">
     <template #header>
       <div
         class="box-card"
@@ -81,9 +28,20 @@ const handleStatusChange = async (act: 'ENABLE' | 'DISABLE', id: number) => {
       </div>
     </template>
     <el-table :data="allPlatform" border label-width="120px" style="width: 100%">
-      <el-table-column type="index" label="序号" width="180" align="center" />
+      <el-table-column type="index" label="序号" align="center" />
       <el-table-column prop="name" label="平台" align="center" />
       <el-table-column prop="sort" label="排序" align="center" />
+      <el-table-column label="是否发布" align="center" v-slot="{ row }">
+        <el-switch
+          v-model="row.publish"
+          class="mb-2"
+          active-value="ENABLE"
+          inactive-value="DISABLE"
+          active-text="启用"
+          inactive-text="禁用"
+          @change="handlepublishChange($event as 'ENABLE' | 'DISABLE', row.id)"
+        />
+      </el-table-column>
 
       <el-table-column label="操作" align="center" v-slot="{ row }">
         <el-button type="primary" @click="dlgPlatformCreateOrEdit?.initAndShow(row.id)"
@@ -94,6 +52,7 @@ const handleStatusChange = async (act: 'ENABLE' | 'DISABLE', id: number) => {
     </el-table>
     <DlgPlatformCreateOrEdit ref="dlgPlatformCreateOrEdit" />
   </el-card>
+
   <el-card class="box-card2">
     <template #header>
       <div
@@ -120,10 +79,11 @@ const handleStatusChange = async (act: 'ENABLE' | 'DISABLE', id: number) => {
     </el-table>
     <DlgReleasePlanCreateOrEdit ref="dlgReleasePlanCreateOrEdit" />
   </el-card>
-  <el-card class="box-card3">
+
+  <el-card class="box-card2">
     <template #header>
       <div
-        class="box-card3"
+        class="box-card2"
         style="display: flex; justify-content: space-between; align-items: center"
       >
         <h3>文案类型</h3>
@@ -135,6 +95,7 @@ const handleStatusChange = async (act: 'ENABLE' | 'DISABLE', id: number) => {
     <el-table :data="allTypeText" border label-width="120px" style="width: 100%">
       <el-table-column type="index" label="序号" width="180" align="center" />
       <el-table-column prop="name" label=" 名字" align="center" />
+      <el-table-column prop="id" label=" ID" align="center" />
       <el-table-column prop="description" label="描述" align="center" />
       <el-table-column label="选题" width="180" align="center" v-slot="{ row }">
         <el-switch
@@ -179,6 +140,8 @@ const handleStatusChange = async (act: 'ENABLE' | 'DISABLE', id: number) => {
     </el-table>
     <DlgTypeTextCreateOrEdit ref="dlgTypeTextCreateOrEdit" />
   </el-card>
+
+
 </template>
 
 <style lang="scss" scoped>
@@ -187,11 +150,6 @@ const handleStatusChange = async (act: 'ENABLE' | 'DISABLE', id: number) => {
   margin-right: 18px;
 }
 .box-card2 {
-  width: auto;
-  margin-right: 18px;
-  margin-top: 17px;
-}
-.box-card3 {
   width: auto;
   margin-right: 18px;
   margin-top: 17px;

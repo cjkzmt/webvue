@@ -56,9 +56,74 @@ const router = createRouter({
           component: () => import('@/views/authors/AuthorIdex.vue'),
         },
         {
-          path: '/urltexts',
-          name: 'urltexts',
-          component: () => import('@/views/urltext/UrlTextIdex.vue'),
+          path: '/fonts',
+          name: 'fonts',
+          component: () => import('@/views/font/FontIdex.vue'),
+        },
+        {
+          path: '/prompttexts',
+          name: 'prompttexts',
+          component: () => import('@/views/prompttext/PromptTextIdex.vue'),
+        },
+        {
+          path: '/tasks',
+          name: 'tasks',
+          component: () => import('@/views/task/TaskIdex.vue'),
+        },
+         {
+          path: '/reviewscript',
+          name: 'reviewscript',
+          component: () => import('@/views/reviewscript/ReviewScriptIdex.vue'),
+        },
+        {
+          path: '/reviewcopy',
+          name: 'reviewcopy',
+          component: () => import('@/views/reviewcopy/ReviewCopyIdex.vue'),
+        },
+        {
+          path: '/teamowners',
+          name: 'teamowners',
+          component: () => import('@/views/teamowner/TeamOwnerIdex.vue'),
+        },
+        {
+          path: '/reviewvideo',
+          name: 'reviewvideo',
+          component: () => import('@/views/reviewvideo/ReviewVideoIdex.vue'),
+        },
+        {
+          path: '/videotypeinfo',
+          name: 'videotypeinfo',
+          component: () => import('@/views/videotypeinfo/VideorTypeInfoIdex.vue'),
+        },
+        {
+          path: '/tokens',
+          name: 'tokens',
+          component: () => import('@/views/apitoken/ApiTokenIdex.vue'),
+        },
+        {
+          path: '/accountteams',
+          name: 'accountteams',
+          component: () => import('@/views/accountteam/AccountTeamIdex.vue'),
+        },
+        {
+          path: '/voiceovers',
+          name: 'voiceovers',
+          component: () => import('@/views/voiceover/VoiceOverIdex.vue'),
+        },
+        {
+          path: '/videoclips',
+          name: 'videoclips',
+          component: () => import('@/views/videoclips/VideoClipsIdex.vue'),
+        },
+        {
+          path: '/musics',
+          name: 'musics',
+          component: () => import('@/views/music/MusicIdex.vue'),
+        },
+        {
+          path: '/topiccopys',
+          name: 'topiccopys',
+          component: () => import('@/views/topiccopy/TopicCopyIdex.vue'),
         },
         {
           path: '/accounts',
@@ -79,6 +144,11 @@ const router = createRouter({
           path: '/leads',
           name: 'leads',
           component: () => import('@/views/leads/LeadIdex.vue'),
+        },
+         {
+          path: '/ollamas',
+          name: 'ollamas',
+          component: () => import('@/views/ollama/OllamaIdex.vue'),
         },
         {
           path: '/pc',

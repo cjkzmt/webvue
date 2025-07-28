@@ -1,38 +1,20 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import {
-  isCreate,
+  forminstance,
   onSubmit,
   form,
   msgText,
   dialogFormVisible,
-  queriedResult,
-} from '@/composables/usePhone'
-import { type FormInstance } from 'element-plus'
-const formLabelWidth = '140px'
-const initAndShow = (id = 0) => {
-  fmResourceCategory.value?.resetFields()
-  dialogFormVisible.value = true
-  if (id) {
-    isCreate.value = false
-    msgText.value = '更新'
-    const resourceCategory = queriedResult.value.records.find((item) => item.id === id)
-    Object.assign(form, resourceCategory)
-  } else {
-    isCreate.value = true
-    msgText.value = '创建'
-  }
-}
-
-const fmResourceCategory = ref<FormInstance>()
-defineExpose({
   initAndShow,
-})
+} from '@/composables/usePhone'
+const formLabelWidth = '140px'
+defineExpose({initAndShow})
 </script>
+
 
 <template>
   <el-dialog v-model="dialogFormVisible" :title="msgText + '手机'" width="500">
-    <el-form :model="form" ref="fmResourceCategory">
+    <el-form :model="form" ref="forminstance">
       <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
         <el-input v-model="form.name" autocomplete="off" />
       </el-form-item>

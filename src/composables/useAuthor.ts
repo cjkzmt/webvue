@@ -2,37 +2,40 @@ import {
   saveOrUpdate,
   getAuthorPages,
   deleteAuthor,
+  enableAuthor, forbidAuthor,
   type QueryCondition,
   type QueryResult,
 } from '@/api/authors'
 import { reactive, ref } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
-export const form = reactive({
+import { ElMessage} from 'element-plus'
+import { type FormInstance } from 'element-plus'
+export const forminstance = ref<FormInstance>()
+const formInitialValues = {
+  id: 0,
   url: '',
-})
+}
+export const form = reactive({...formInitialValues})
+export const initAndShow = (id = 0) => {
+  if (id) {
+    isCreate.value = false
+    msgText.value = '更新'
+    const variable = queriedResult.value.records.find((item) => item.id === id)
+    // 使用深拷贝避免污染初始值
+    Object.assign(form, {...variable})
+  } else {
+    isCreate.value = true
+    msgText.value = '创建'
+    // 显式重置表单数据
+    Object.assign(form, formInitialValues)
+  }
+  // 强制表单重置验证状态
+  forminstance.value?.clearValidate()
+  dialogFormVisible.value = true
+}
 export const isCreate = ref(true)
 export const msgText = ref('')
 //提交按钮
-export const onSubmit = async () => {
-  const { data } = await saveOrUpdate(form).finally(() => (dialogFormVisible.value = false))
-  if (data.code === '000000') {
-    ElMessage.success(`${msgText.value}作者链接成功`)
-    queryAuthor()
-  } else {
-    ElMessage.error(`${msgText.value}作者链接失败`)
-    throw new Error(`${msgText.value}作者链接失败`)
-  }
-}
-
-export const dialogFormVisible = ref(false)
-
-//查询条件
-export const queryCondition = ref({} as QueryCondition)
-
-//结果
-export const queriedResult = ref({} as QueryResult)
-
-//动作
+const distext = ref('作者链接')
 export const queryAuthor = async (params?: QueryCondition) => {
   Object.assign(queryCondition.value, params)
   const { data } = await getAuthorPages(queryCondition.value)
@@ -44,22 +47,32 @@ export const queryAuthor = async (params?: QueryCondition) => {
     throw new Error('获取用户列表失败' + data.mesg)
   }
 }
-
-export const handleDelete = async (id: number) => {
-  await ElMessageBox.confirm('此操作将永久删除该作者链接, 是否继续?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning',
-  }).catch(() => {
-    ElMessage.info('已取消删除')
-    return new Promise(() => {})
-  })
-  const { data } = await deleteAuthor(id)
+export const onSubmit = async () => {
+  const { data } = await saveOrUpdate(form).finally(() => (dialogFormVisible.value = false))
   if (data.code === '000000') {
-    ElMessage.success('删除作者链接成功')
+    ElMessage.success(`${msgText.value}作者链接成功`)
     queryAuthor()
   } else {
-    ElMessage.error('删除作者链接失败')
-    throw new Error('删除作者链接失败')
+    ElMessage.error(`${msgText.value}作者链接失败`)
+    throw new Error(`${msgText.value}作者链接失败`)
   }
 }
+export const dialogFormVisible = ref(false)
+//查询条件
+export const queryCondition = ref({} as QueryCondition)
+//结果
+export const queriedResult = ref({} as QueryResult)
+//动作
+
+
+import {createHandler ,createDeleteHandler } from '@/utils/Common'
+export const handleDelete = createDeleteHandler({
+  deleteFn: deleteAuthor,
+  refresh: queryAuthor,
+  getDisplayName: () => distext.value
+})
+export const handleStatusChange = createHandler(
+  enableAuthor,
+  forbidAuthor,
+  queryAuthor
+)

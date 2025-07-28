@@ -1,86 +1,40 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import {
-  isCreate,
+  forminstance,
+  initAndShow,
   onSubmit,
   form,
   msgText,
   dialogFormVisible,
-  queriedResult,
 } from '@/composables/useAccount'
-import { type FormInstance } from 'element-plus'
-const formLabelWidth = '140px'
-const initAndShow = (id = 0) => {
-  fmResourceCategory.value?.resetFields()
-  dialogFormVisible.value = true
-  if (id) {
-    isCreate.value = false
-    msgText.value = '更新'
-    const resourceCategory = queriedResult.value.records.find((item) => item.id === id)
-    Object.assign(form, resourceCategory)
-  } else {
-    isCreate.value = true
-    msgText.value = '创建'
-  }
-}
-const fmResourceCategory = ref<FormInstance>()
-defineExpose({
-  initAndShow,
-})
-import { getTopPhones, type TopPhones } from '@/api/phones'
-const topPhones = ref([] as TopPhones[])
-const fetchTopPhones = async () => {
-  try {
-    const { data } = await getTopPhones()
-    topPhones.value = data.data
-  } catch (error) {
-    console.error('获取手机列表失败:', error)
-  }
-}
-fetchTopPhones()
-import { getTopPNumbers, type TopPNumbers } from '@/api/pnumbers'
-const topPNumbers = ref([] as TopPNumbers[])
-const fetchTopPNumbers = async () => {
-  try {
-    const { data } = await getTopPNumbers()
-    topPNumbers.value = data.data
-  } catch (error) {
-    console.error('获取手机列表失败:', error)
-  }
-}
-fetchTopPNumbers()
-import { allPlatform, getAllPlatform } from '@/composables/usePlatform'
-getAllPlatform()
 
-import { getTopCertifiers, type TopCertifiers } from '@/api/certifiers'
-const topCertifiers = ref([] as TopCertifiers[])
-const fetchTopCertifiers = async () => {
-  try {
-    const { data } = await getTopCertifiers()
-    topCertifiers.value = data.data
-  } catch (error) {
-    console.error('获取手机列表失败:', error)
-  }
-}
+import {topCertifiers , fetchTopCertifiers } from '@/composables/useCertifier'
+import { topAccountTeams, fetchTopAccountTeams } from '@/composables/useAccountTeam'
+import { allPlatform, getAllPlatform } from '@/composables/usePlatform'
+import {topPNumbers , fetchTopPNumbers } from '@/composables/usePNumber'
+const formLabelWidth = '140px'
+defineExpose({initAndShow})
+fetchTopAccountTeams()
+fetchTopPNumbers()
+getAllPlatform()
 fetchTopCertifiers()
 </script>
 
 <template>
   <el-dialog v-model="dialogFormVisible" :title="msgText + '账号'" width="500">
-    <el-form :model="form" ref="fmResourceCategory">
-      <el-form-item label="所在手机" :label-width="formLabelWidth">
-        <el-select v-model="form.PhoneId" placeholder="请选择所在手机">
+    <el-form :model="form" ref="forminstance">
+      <el-form-item label="所在组" :label-width="formLabelWidth" prop="AccountTeamId">
+        <el-select v-model="form.AccountTeamId" placeholder="请选择所在组">
           <el-option label="未知" :value="-1" />
           <el-option
-            v-for="Phone in topPhones"
-            :key="Phone.id"
-            :label="Phone.name"
-            :value="Phone.id"
+            v-for="AccountTeam in topAccountTeams"
+            :key="AccountTeam.id"
+            :label="AccountTeam.number"
+            :value="AccountTeam.id"
           />
         </el-select>
       </el-form-item>
-
-      <el-form-item label="所在平台" :label-width="formLabelWidth">
+      <el-form-item label="所在平台" :label-width="formLabelWidth" prop="PlatformId">
         <el-select v-model="form.PlatformId" placeholder="请选择所在平台">
           <el-option label="未知" :value="-1" />
           <el-option
@@ -90,9 +44,6 @@ fetchTopCertifiers()
             :value="Platform.id"
           />
         </el-select>
-      </el-form-item>
-      <el-form-item label="组号" :label-width="formLabelWidth" prop="team">
-        <el-input v-model="form.team" autocomplete="off" />
       </el-form-item>
       <el-form-item label="账号名" :label-width="formLabelWidth" prop="name">
         <el-input v-model="form.name" autocomplete="off" />
@@ -110,18 +61,18 @@ fetchTopCertifiers()
         <el-input v-model="form.note" autocomplete="off" />
       </el-form-item>
 
-      <el-form-item label="绑定手机号" :label-width="formLabelWidth">
+      <el-form-item label="绑定手机号" :label-width="formLabelWidth" prop="PNumberId">
         <el-select v-model="form.PNumberId" placeholder="请选择绑定手机号">
           <el-option label="未知" :value="-1" />
           <el-option
-            v-for="Phone in topPNumbers"
-            :key="Phone.id"
-            :label="Phone.number"
-            :value="Phone.id"
+            v-for="AccountTeam in topPNumbers"
+            :key="AccountTeam.id"
+            :label="AccountTeam.number"
+            :value="AccountTeam.id"
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="认证人" :label-width="formLabelWidth">
+      <el-form-item label="认证人" :label-width="formLabelWidth" prop="PNumberId">
         <el-select v-model="form.PNumberId" placeholder="请选择认证人">
           <el-option label="未知" :value="-1" />
           <el-option

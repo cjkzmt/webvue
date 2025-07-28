@@ -1,43 +1,26 @@
 import request from '@/utils/request'
-type Common<T> = {
-  code: string
-  data: T
-  mesg: string
-  time: string
-}
-
+import type {Common ,Result} from '@/utils/QueryResult'
 type accountItem = {
   id: number
+  AccountTeamId: number
+  AccountTeam: number
+  PlatformId: number
+  Platform: string
   name: string
   number: string
+  isDel: boolean
   password: string
   profile: string
-  team: number
-  note: string
   PNumberId: number
   PNumber: number
   CertifierId: number
   Certifier: string
-  PlatformId: number
-  Platform: string
-  PhoneId: number
-  Phone: string
   status: 'ENABLE' | 'DISABLE'
+  note: string
   updatedTime: string
   createdTime: string
 }
-export type QueryResult = {
-  current: number // 当前页码
-  hitcount: boolean // 是否命中计数，用于分页查询时是否统计总记录数
-  optimizeCountSql: boolean // 是否优化计数SQL，用于分页查询性能优化
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  orders: any[]
-  pages: number
-  records: accountItem[]
-  searchCount: boolean
-  size: number
-  total: number
-}
+export type QueryResult = Result<accountItem[]>
 export type QueryCondition = Partial<{
   currentPage: number
   pageSize: number
@@ -55,7 +38,6 @@ export const getAccountPages = (queryCondition: QueryCondition = {}) => {
     data: queryCondition,
   })
 }
-
 type CreateOrEnditaccount = Partial<accountItem>
 export const saveOrUpdate = (data: CreateOrEnditaccount) => {
   return request<Common<boolean>>({
@@ -67,7 +49,6 @@ export const saveOrUpdate = (data: CreateOrEnditaccount) => {
     throw new Error('操作失败')
   })
 }
-
 export const deleteAccount = (accountId: number) => {
   return request<Common<boolean>>({
     method: 'POST',
@@ -78,7 +59,6 @@ export const deleteAccount = (accountId: number) => {
     },
   })
 }
-
 export const enableAccount = (accountId: number) => {
   return request<Common<boolean>>({
     method: 'POST',
@@ -89,7 +69,6 @@ export const enableAccount = (accountId: number) => {
     },
   })
 }
-
 export const forbidAccount = (accountId: number) => {
   return request<Common<boolean>>({
     method: 'POST',

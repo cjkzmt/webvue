@@ -1,36 +1,12 @@
 <script setup lang="ts">
-import { queriedResult, queryCondition, queryUsers } from '@/composables/useUsers'
-import { enableUser, forbidUser } from '@/api/users'
+import { queriedResult, queryCondition, queryUsers,handleStatusChange } from '@/composables/useUsers'
 import { timeFormatter } from '@/utils/timeHandler'
-import { ElMessage } from 'element-plus'
-import { ref, watch } from 'vue'
+import { ref, } from 'vue'
 queryUsers()
 const circleUrl = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
-
-const handleStatusChange = async (act: 'ENABLE' | 'DISABLE', userId: number) => {
-  const action = {
-    ENABLE: { msg: '启用', fn: enableUser },
-    DISABLE: { msg: '禁用', fn: forbidUser },
-  }
-  const { data } = await action[act].fn(userId)
-  if (data.code === '000000') {
-    ElMessage.success(`${action[act].msg}成功`)
-    queryUsers()
-  } else {
-    ElMessage.error(`${action[act].msg}失败`)
-    throw new Error(`${action[act].msg}失败`)
-  }
-}
-const timeRange = ref('')
-watch(timeRange, (newTime) => {
-  if (Array.isArray(newTime)) {
-    queryCondition.value.statCreateTime = newTime[0]?.toISOString()
-    queryCondition.value.endCreateTime = newTime[1]?.toISOString()
-  } else {
-    queryCondition.value.statCreateTime = ''
-    queryCondition.value.endCreateTime = ''
-  }
-})
+import { createTimeRangeWatcher } from '@/utils/Common'
+const timeRange = ref<[Date, Date] | ''>('')
+createTimeRangeWatcher(queryCondition)(timeRange)
 </script>
 
 <template>

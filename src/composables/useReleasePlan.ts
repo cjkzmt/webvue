@@ -1,5 +1,5 @@
 import { getAll, saveOrUpdate, deleteReleasePlan, type ReleasePlanItem } from '@/api/releaseplan'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
 //保存数据
 export const allReleasePlan = ref([] as ReleasePlanItem[])
@@ -13,12 +13,25 @@ export const getAllReleasePlan = async () => {
     throw new Error('获取资源分类信息失败')
   }
 }
-
+import { type FormInstance } from 'element-plus'
+export const forminstance = ref<FormInstance>()
 export const form = reactive({
   hour: 0,
   minute: 0,
 })
-
+export const initAndShow = (id = 0) => {
+  forminstance.value?.resetFields()
+  dialogFormVisible.value = true
+  if (id) {
+    isCreate.value = false
+    msgText.value = '更新'
+    const TypeVideo = allReleasePlan.value.find((item) => item.id === id)
+    Object.assign(form, TypeVideo)
+  } else {
+    isCreate.value = true
+    msgText.value = '创建'
+  }
+}
 export const isCreate = ref(true)
 export const msgText = ref('')
 //提交按钮
@@ -34,21 +47,10 @@ export const onSubmit = async () => {
 }
 
 export const dialogFormVisible = ref(false)
-export const DeleteReleasePlan = async (id: number) => {
-  await ElMessageBox.confirm('此操作将永久删除该发布计划, 是否继续?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning',
-  }).catch(() => {
-    ElMessage.info('已取消删除')
-    return new Promise(() => {})
-  })
-  const { data } = await deleteReleasePlan(id)
-  if (data.code === '000000') {
-    ElMessage.success('删除发布计划成功')
-    getAllReleasePlan()
-  } else {
-    ElMessage.error('删除发布计划失败')
-    throw new Error('删除发布计划失败')
-  }
-}
+const distext = ref('账号组')
+import {createDeleteHandler } from '@/utils/Common'
+export const DeleteReleasePlan = createDeleteHandler({
+  deleteFn: deleteReleasePlan,
+  refresh: getAllReleasePlan,
+  getDisplayName: () => distext.value
+})

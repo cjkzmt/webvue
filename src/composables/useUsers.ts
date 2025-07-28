@@ -1,4 +1,5 @@
-import { getUserPages, type QueryCondition, type QueryResult } from '@/api/users'
+import { getUserPages, enableUser, forbidUser,type QueryCondition, type QueryResult } from '@/api/users'
+
 import { ElMessage } from 'element-plus'
 import { ref } from 'vue'
 
@@ -7,7 +8,7 @@ export const queryCondition = ref({} as QueryCondition)
 
 //结果
 export const queriedResult = ref({} as QueryResult)
-
+const distext = ref('账号组')
 //动作
 export const queryUsers = async (params?: QueryCondition) => {
   Object.assign(queryCondition.value, params)
@@ -20,3 +21,12 @@ export const queryUsers = async (params?: QueryCondition) => {
     throw new Error('获取用户列表失败' + data.mesg)
   }
 }
+
+
+import {createHandler  } from '@/utils/Common'
+
+export const handleStatusChange = createHandler(
+  enableUser,
+  forbidUser,
+  queryUsers
+)
