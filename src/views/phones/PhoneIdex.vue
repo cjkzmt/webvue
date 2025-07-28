@@ -1,36 +1,13 @@
 <script setup lang="ts">
-import { queriedResult, queryCondition, queryPhone, handleDelete } from '@/composables/usePhone'
-import { enablePhone, forbidPhone } from '@/api/phones'
+import { queriedResult, queryCondition, queryPhone, handleDelete ,handleStatusChange} from '@/composables/usePhone'
 import { timeFormatter } from '@/utils/timeHandler'
-import { ElMessage } from 'element-plus'
-import { ref, watch } from 'vue'
+import { ref} from 'vue'
 import DlgPhoneCreateOrEdit from './DlgPhoneCreateOrEdit.vue'
 queryPhone()
 const dlgCreateOrEdit = ref<InstanceType<typeof DlgPhoneCreateOrEdit>>()
-const handleStatusChange = async (act: 'ENABLE' | 'DISABLE', userId: number) => {
-  const action = {
-    ENABLE: { msg: '启用', fn: enablePhone },
-    DISABLE: { msg: '禁用', fn: forbidPhone },
-  }
-  const { data } = await action[act].fn(userId)
-  if (data.code === '000000') {
-    ElMessage.success(`${action[act].msg}成功`)
-    queryPhone()
-  } else {
-    ElMessage.error(`${action[act].msg}失败`)
-    throw new Error(`${action[act].msg}失败`)
-  }
-}
-const timeRange = ref('')
-watch(timeRange, (newTime) => {
-  if (Array.isArray(newTime)) {
-    queryCondition.value.statCreateTime = newTime[0]?.toISOString()
-    queryCondition.value.endCreateTime = newTime[1]?.toISOString()
-  } else {
-    queryCondition.value.statCreateTime = ''
-    queryCondition.value.endCreateTime = ''
-  }
-})
+import { createTimeRangeWatcher } from '@/utils/Common'
+const timeRange = ref<[Date, Date] | ''>('')
+createTimeRangeWatcher(queryCondition)(timeRange)
 </script>
 
 <template>

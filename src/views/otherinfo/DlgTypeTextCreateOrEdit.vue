@@ -1,38 +1,19 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import {
-  isCreate,
+  forminstance,
   onSubmit,
   form,
   msgText,
   dialogFormVisible,
-  allTypeText,
-} from '@/composables/useTypeText'
-import { type FormInstance } from 'element-plus'
-const formLabelWidth = '140px'
-const initAndShow = (id = 0) => {
-  fmTypeText.value?.resetFields()
-  dialogFormVisible.value = true
-  if (id) {
-    isCreate.value = false
-    msgText.value = '更新'
-    const TypeText = allTypeText.value.find((item) => item.id === id)
-    Object.assign(form, TypeText)
-  } else {
-    isCreate.value = true
-    msgText.value = '创建'
-  }
-}
-
-const fmTypeText = ref<FormInstance>()
-defineExpose({
   initAndShow,
-})
+} from '@/composables/useTypeText'
+const formLabelWidth = '140px'
+defineExpose({initAndShow})
 </script>
 
 <template>
   <el-dialog v-model="dialogFormVisible" :title="msgText + '文案类型'" width="500">
-    <el-form :model="form" ref="fmTypeText">
+    <el-form :model="form" ref="forminstance">
       <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
         <el-input v-model="form.name" autocomplete="off" />
       </el-form-item>

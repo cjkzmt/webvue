@@ -1,54 +1,26 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import {
-  isCreate,
+  forminstance,
   onSubmit,
   form,
   msgText,
   dialogFormVisible,
-  queriedResult,
-} from '@/composables/usePNumber'
-import { type FormInstance } from 'element-plus'
-const formLabelWidth = '140px'
-const initAndShow = (id = 0) => {
-  fmResourceCategory.value?.resetFields()
-  dialogFormVisible.value = true
-  if (id) {
-    isCreate.value = false
-    msgText.value = '更新'
-    const resourceCategory = queriedResult.value.records.find((item) => item.id === id)
-    Object.assign(form, resourceCategory)
-  } else {
-    isCreate.value = true
-    msgText.value = '创建'
-  }
-}
-
-const fmResourceCategory = ref<FormInstance>()
-defineExpose({
   initAndShow,
-})
-
-import { getTopPhones, type TopPhones } from '@/api/phones'
-const topPhones = ref([] as TopPhones[])
-
-const fetchTopPhones = async () => {
-  try {
-    const { data } = await getTopPhones()
-    topPhones.value = data.data
-  } catch (error) {
-    console.error('获取手机列表失败:', error)
-  }
-}
-
+} from '@/composables/usePNumber'
+import { fetchTopPhones, topPhones } from '@/composables/usePhone'
+const formLabelWidth = '140px'
+defineExpose({initAndShow})
 fetchTopPhones()
 </script>
 
 <template>
   <el-dialog v-model="dialogFormVisible" :title="msgText + '手机'" width="500">
-    <el-form :model="form" ref="fmResourceCategory">
+    <el-form :model="form" ref="forminstance">
       <el-form-item label="手机号" :label-width="formLabelWidth" prop="number">
         <el-input v-model="form.number" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="编号" :label-width="formLabelWidth" prop="code">
+        <el-input v-model="form.code" autocomplete="off" />
       </el-form-item>
       <el-form-item label="所有人" :label-width="formLabelWidth" prop="Owner">
         <el-input v-model="form.Owner" autocomplete="off" />

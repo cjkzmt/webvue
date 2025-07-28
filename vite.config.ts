@@ -15,7 +15,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 export default defineConfig({
   server: {
     host: '0.0.0.0', // 允许外部访问
-    port: 5173, // 确保端口正确
+    port: 7000, // 确保端口正确
     proxy: {
       '/api': {
         target: loadEnv('', process.cwd()).VITE_API_URL, //'http://117.72.111.98:8011', ///,

@@ -2,45 +2,16 @@ import {
   saveOrUpdate,
   getAccountPages,
   deleteAccount,
+  enableAccount, forbidAccount,
   type QueryCondition,
   type QueryResult,
 } from '@/api/accounts'
+
 import { reactive, ref } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
-
-export const form = reactive({
-  name: '',
-  number: '',
-  password: '',
-  profile: '',
-  PNumberId: -1,
-  PNumber: 0,
-  CertifierId: -1,
-  Certifier: '',
-  PlatformId: -1,
-  Platform: '',
-  PhoneId: -1,
-  Phone: '',
-  team: 0,
-  note: '',
-})
-
-export const isCreate = ref(true)
-export const msgText = ref('')
-//提交按钮
-export const onSubmit = async () => {
-  const { data } = await saveOrUpdate(form).finally(() => (dialogFormVisible.value = false))
-  if (data.code === '000000') {
-    ElMessage.success(`${msgText.value}账号成功`)
-    queryAccount()
-  } else {
-    ElMessage.error(`${msgText.value}账号失败`)
-    throw new Error(`${msgText.value}账号失败`)
-  }
-}
-
+import { ElMessage } from 'element-plus'
+import { type FormInstance } from 'element-plus'
+export const forminstance = ref<FormInstance>()
 export const dialogFormVisible = ref(false)
-
 //查询条件
 export const queryCondition = ref({} as QueryCondition)
 
@@ -48,33 +19,74 @@ export const queryCondition = ref({} as QueryCondition)
 export const queriedResult = ref({} as QueryResult)
 
 //动作
+const distext = ref('账号')
 export const queryAccount = async (params?: QueryCondition) => {
   Object.assign(queryCondition.value, params)
   const { data } = await getAccountPages(queryCondition.value)
   if (data.code === '000000') {
     queriedResult.value = data.data
-    console.log('用户数据:', data.data) // 添加打印数据
+    console.log(`${distext.value}列表数据`, data.data) // 添加打印数据
   } else {
-    ElMessage.error('获取用户列表失败' + data.mesg)
-    throw new Error('获取用户列表失败' + data.mesg)
+    ElMessage.error(`获取${distext.value}列表失败` + data.mesg)
+    throw new Error(`获取${distext.value}列表失败` + data.mesg)
+  }
+}
+import {createHandler ,createDeleteHandler } from '@/utils/Common'
+export const handleDelete = createDeleteHandler({
+  deleteFn: deleteAccount,
+  refresh: queryAccount,
+  getDisplayName: () => distext.value
+})
+export const handleStatusChange = createHandler(
+  enableAccount,
+  forbidAccount,
+  queryAccount
+)
+
+export const msgText = ref('')
+const isCreate = ref(true)
+const formInitialValues = {
+  id: 0,
+  AccountTeamId: -1,
+  PlatformId: -1,
+  name: '',
+  number: '',
+  password: '',
+  profile: '',
+  PNumberId: -1,
+  CertifierId: -1,
+  note: '',
+}
+export const form = reactive({...formInitialValues})
+
+
+export const initAndShow = (id = 0) => {
+  if (id) {
+    isCreate.value = false
+    msgText.value = '更新'
+    const variable = queriedResult.value.records.find((item) => item.id === id)
+    // 使用深拷贝避免污染初始值
+    Object.assign(form, {...variable})
+  } else {
+    isCreate.value = true
+    msgText.value = '创建'
+    // 显式重置表单数据
+    Object.assign(form, formInitialValues)
+  }
+  // 强制表单重置验证状态
+  forminstance.value?.clearValidate()
+  dialogFormVisible.value = true
+}
+
+//提交按钮
+export const onSubmit = async () => {
+  const { data } = await saveOrUpdate(form).finally(() => (dialogFormVisible.value = false))
+  if (data.code === '000000') {
+    ElMessage.success(`${msgText.value}${distext.value}成功`)
+    queryAccount()
+  } else {
+    ElMessage.error(`${msgText.value}${distext.value}失败`)
+    throw new Error(`${msgText.value}${distext.value}失败`)
   }
 }
 
-export const handleDelete = async (id: -1) => {
-  await ElMessageBox.confirm('此操作将永久删除该账号, 是否继续?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning',
-  }).catch(() => {
-    ElMessage.info('已取消删除')
-    return new Promise(() => {})
-  })
-  const { data } = await deleteAccount(id)
-  if (data.code === '000000') {
-    ElMessage.success('删除账号成功')
-    queryAccount()
-  } else {
-    ElMessage.error('删除账号失败')
-    throw new Error('删除账号失败')
-  }
-}

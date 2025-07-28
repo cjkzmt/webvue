@@ -1,1 +1,1 @@
-export const isCollapse = ref(true)
+export const isCollapse = ref(false)

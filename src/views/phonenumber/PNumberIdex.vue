@@ -1,36 +1,13 @@
 <script setup lang="ts">
-import { queriedResult, queryCondition, queryPNumber, handleDelete } from '@/composables/usePNumber'
-import { enablePNumber, forbidPNumber } from '@/api/pnumbers'
+import { queriedResult, queryCondition, queryPNumber, handleDelete, handleStatusChange } from '@/composables/usePNumber'
 import { timeFormatter } from '@/utils/timeHandler'
-import { ElMessage } from 'element-plus'
-import { ref, watch } from 'vue'
+import { ref} from 'vue'
 import DlgPNumberCreateOrEdit from './DlgPNumberCreateOrEdit.vue'
 queryPNumber()
 const dlgCreateOrEdit = ref<InstanceType<typeof DlgPNumberCreateOrEdit>>()
-const handleStatusChange = async (act: 'ENABLE' | 'DISABLE', userId: number) => {
-  const action = {
-    ENABLE: { msg: '启用', fn: enablePNumber },
-    DISABLE: { msg: '禁用', fn: forbidPNumber },
-  }
-  const { data } = await action[act].fn(userId)
-  if (data.code === '000000') {
-    ElMessage.success(`${action[act].msg}成功`)
-    queryPNumber()
-  } else {
-    ElMessage.error(`${action[act].msg}失败`)
-    throw new Error(`${action[act].msg}失败`)
-  }
-}
-const timeRange = ref('')
-watch(timeRange, (newTime) => {
-  if (Array.isArray(newTime)) {
-    queryCondition.value.statCreateTime = newTime[0]?.toISOString()
-    queryCondition.value.endCreateTime = newTime[1]?.toISOString()
-  } else {
-    queryCondition.value.statCreateTime = ''
-    queryCondition.value.endCreateTime = ''
-  }
-})
+import { createTimeRangeWatcher } from '@/utils/Common'
+const timeRange = ref<[Date, Date] | ''>('')
+createTimeRangeWatcher(queryCondition)(timeRange)
 </script>
 
 <template>
@@ -69,6 +46,7 @@ watch(timeRange, (newTime) => {
     <el-table :data="queriedResult.records" border style="width: 100%">
       <el-table-column type="index" label="序号" width="180" align="center" />
       <el-table-column prop="number" label="手机号" width="180" align="center" />
+      <el-table-column prop="code" label="编号" width="180" align="center" />
       <el-table-column prop="Owner" label="所有人" width="180" align="center" />
       <el-table-column prop="rent" label="月租" width="180" align="center" />
       <el-table-column prop="Phone" label="所在手机" width="180" align="center" />

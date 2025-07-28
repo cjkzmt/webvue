@@ -56,6 +56,7 @@ declare module 'vue' {
     IEpDataLine: typeof import('~icons/ep/data-line')['default']
     IEpDocument: typeof import('~icons/ep/document')['default']
     IEpExpand: typeof import('~icons/ep/expand')['default']
+    IEpFilm: typeof import('~icons/ep/film')['default']
     IEpFold: typeof import('~icons/ep/fold')['default']
     IEpManagement: typeof import('~icons/ep/management')['default']
     IEpMemo: typeof import('~icons/ep/memo')['default']

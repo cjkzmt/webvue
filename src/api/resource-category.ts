@@ -1,11 +1,6 @@
 import request from '@/utils/request'
+import type {Common } from '@/utils/QueryResult'
 
-type Common<T> = {
-  code: string
-  data: T
-  mesg: string
-  time: string
-}
 export type ResourceCategory = {
   id: number
   name: string
