@@ -3,6 +3,7 @@ import {
   forminstance,
   onSubmit,
   form,
+  distext,
   msgText,
   dialogFormVisible,
   initAndShow,
@@ -11,7 +12,7 @@ const formLabelWidth = '140px'
 defineExpose({initAndShow})
 </script>
 <template>
-  <el-dialog v-model="dialogFormVisible" :title="msgText + '平台'" width="500">
+  <el-dialog v-model="dialogFormVisible" :title="msgText + distext" width="500">
     <el-form :model="form" ref="forminstance">
       <el-form-item label="时" :label-width="formLabelWidth" prop="hour">
         <el-input v-model="form.hour" autocomplete="off" />

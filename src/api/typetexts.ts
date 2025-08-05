@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 import type {Common } from '@/utils/QueryResult'
 
-export type TypeTextItem = {
+export type Item = {
   id: number
   name: string
   description: string
@@ -12,7 +12,7 @@ export type TypeTextItem = {
 }
 
 export const getAll = () => {
-  return request<Common<TypeTextItem[]>>({
+  return request<Common<Item[]>>({
     method: 'GET',
     url: '/api/typetext/getAll',
   }).catch((error) => {
@@ -21,7 +21,7 @@ export const getAll = () => {
   })
 }
 
-export type CreateOrEndittypetext = Partial<TypeTextItem>
+export type CreateOrEndittypetext = Partial<Item>
 export const saveOrUpdate = (typetextInfo: CreateOrEndittypetext) => {
   return request<Common<boolean>>({
     method: 'POST',

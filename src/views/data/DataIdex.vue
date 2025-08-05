@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { queriedResult, queryCondition, queryAccountTeam, handleDelete,handleStatusChange } from '@/composables/useAccountTeam'
-import { timeFormatter } from '@/utils/timeHandler'
-import { ref} from 'vue'
-import DlgAccountTeamCreateOrEdit from './DlgAccountTeamCreateOrEdit.vue'
-queryAccountTeam()
-const dlgCreateOrEdit = ref<InstanceType<typeof DlgAccountTeamCreateOrEdit>>()
+import { queriedResult, queryCondition, queryData, handleDelete,handleStatusChange } from '@/composables/useData'
+import { ref, } from 'vue'
+import DlgDataCreateOrEdit from './DlgDataCreateOrEdit.vue'
+queryData()
+const dlgCreateOrEdit = ref<InstanceType<typeof DlgDataCreateOrEdit>>()
+
 import { createTimeRangeWatcher } from '@/utils/Common'
 const timeRange = ref<[Date, Date] | ''>('')
 createTimeRangeWatcher(queryCondition)(timeRange)
@@ -18,9 +18,6 @@ createTimeRangeWatcher(queryCondition)(timeRange)
         style="display: flex; justify-content: space-between; align-items: center"
       >
         <el-form :inline="true" :model="queryCondition" class="demo-form-inline">
-          <!-- <el-form-item label="账号组号">
-            <el-input v-model="queryCondition.number" placeholder="请输入账号组号" clearable />
-          </el-form-item> -->
           <el-form-item label="录入时间">
             <el-date-picker
               v-model="timeRange"
@@ -31,7 +28,7 @@ createTimeRangeWatcher(queryCondition)(timeRange)
             />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="queryAccountTeam({ currentPage: 1 })">查询</el-button>
+            <el-button type="primary" @click="queryData({ currentPage: 1 })">查询</el-button>
           </el-form-item>
         </el-form>
         <el-button
@@ -39,40 +36,30 @@ createTimeRangeWatcher(queryCondition)(timeRange)
           style="margin-top: -19px"
           type="primary"
           @click="dlgCreateOrEdit?.initAndShow()"
-          >添加账号组号</el-button
+          >添加作者</el-button
         >
       </div>
     </template>
     <el-table :data="queriedResult.records" border style="width: 100%">
-      <el-table-column type="index" label="序号" width="80" align="center" />
-      <el-table-column prop="shorthand" label="所属商家" width="110" align="center" />
-      <el-table-column prop="Computer" label="所在电脑" width="110" align="center" />
-      <el-table-column prop="number" label="组号" width="180" align="center" />
-      <el-table-column prop="scope" label="业务范围"  align="center" />
-      <el-table-column prop="TypeVideo" label="视频样式" align="center" />
-      <el-table-column prop="TypeCover" label="封面样式" align="center" />
-      <el-table-column prop="TypeSubtitle" label="字幕样式" align="center" />
-      <el-table-column prop="Phone" label="所在手机" width="100" align="center" />
-      <el-table-column
-        prop="createdTime"
-        label="注册时间"
-        width="180"
-        align="center"
-        :formatter="timeFormatter"
-      />
+      <el-table-column type="index" label="序号" width="180" align="center" />
+      <el-table-column prop="id" label="ID" width="180" align="center" />
+      <el-table-column prop="Script_id" label="脚本" width="180" align="center" />
+      <el-table-column prop="Account" label="账号" width="180" align="center" />
       <el-table-column label="状态" width="180" align="center" v-slot="{ row }">
         <el-switch
           v-model="row.status"
           class="mb-2"
           active-value="ENABLE"
           inactive-value="DISABLE"
-          active-text="启用"
-          inactive-text="禁用"
+          active-text="未采集"
+          inactive-text="已采集"
           @change="handleStatusChange($event as 'ENABLE' | 'DISABLE', row.id)"
         />
       </el-table-column>
+      <el-table-column prop="title" label="标题" width="180" align="center" />
+
       <el-table-column label="操作" align="center" v-slot="{ row }">
-        <el-button type="primary" @click="dlgCreateOrEdit?.initAndShow(row.id)">编辑</el-button>
+        <!-- <el-button type="primary" @click="dlgCreateOrEdit?.initAndShow(row.id)">编辑</el-button> -->
         <el-button type="danger" @click="handleDelete(row.id)">删除</el-button>
       </el-table-column>
     </el-table>
@@ -83,10 +70,10 @@ createTimeRangeWatcher(queryCondition)(timeRange)
       :background="true"
       layout="total, sizes, prev, pager, next, jumper"
       :total="queriedResult.total"
-      @size-change="(pageSize: number) => queryAccountTeam({ pageSize, currentPage: 1 })"
-      @current-change="(currentPage: number) => queryAccountTeam({ currentPage })"
+      @size-change="(pageSize: number) => queryData({ pageSize, currentPage: 1 })"
+      @current-change="(currentPage: number) => queryData({ currentPage })"
     />
-    <DlgAccountTeamCreateOrEdit ref="dlgCreateOrEdit" />
+    <DlgDataCreateOrEdit ref="dlgCreateOrEdit" />
   </el-card>
 </template>
 

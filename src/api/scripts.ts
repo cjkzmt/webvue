@@ -1,67 +1,77 @@
 import request from '@/utils/request'
-import type {Common, Result } from '@/utils/QueryResult'
-
-type scriptItem = {
+import type {Common, Result,Condition } from '@/utils/QueryResult'
+export type QueryCondition = Partial<Condition&{
+  AccountTeam_id: number
+  Day:number
+  getinfo: string
+}>
+type InItem = {
   id: number
-  VideoTemplateId:  number
-  VideoTemplate:  string
-  topicId:  number
-  topictext:  string
-  copyId:  number
-  copytext:  string
-  PromptTextId:  number
-  promptText:  string
-  title:string
-  AccountTeamId:  number
-  AccountTeam:  number
-  covercopy: string
-  line: string
-  linestatus: string
-  displaysubtitle: string
-  pronunciation: string
-  copystatus: string
-  FontId: number
-  Font: string
+  topic_id:  number
+  copy_id:  number
+  AccountTeam_id:  number
+  PromptText_id:  number
+  ReleasePlan_id:  number
   publishtime: string
-  TemplateId: string
-  ReleasePlanId:  number
-  operatorId: number
-  ComputerId: number
+  Music_id: number
+  Over_id: number
+  Font_id: number
+  VideoTemplate_id:  number
+  Videopath:  string
+  drafline: string
+  line: string
+  draftitle: string
+  title:string
+  drafcover: string
+  cover: string
+  subtitle: string
+  reading: string
   videoname: string
-  videopath: string
-  videostatus: string
-  MusicId: number
-  Music: string
-  VoiceOverId: number
-  VoiceOver: string
-  douyin: string
-  sph: string
-  kuaishou: string
-  xiaohongshu: string
+}
+
+type DataItem={
+  id:  number
+  Account_id: number
+  Platform: string
+  character:number
+  keycount:number
+  publishurl: string
+  verification:string
   status: string
+}
+
+type Item = InItem&{
+  topictext:  string
+  copytext:  string
+  AccountTeam:  number
+  promptText:  string
+  Music: string
+  Over: string
+  Font: string
+  VideoTemplate:  string
   createdTime: string
+  linestatus: string
+  copystatus: string
+  videostatus: string
+  Templatenum: string
+  operator_id: number
+  Computer_id: number
+  videopath: string
+  publish:DataItem[]
+  status: string
   updatedTime: string}
 
-export type QueryResult =Result<scriptItem[]>
-export type QueryCondition = Partial<{
-  currentPage: number // 查询的当前页码
-  pageSize: number // 每页显示的记录数
-  ScriptId: string
-  AccountTeamId: number
-  Day:number
-  status: string
-  getinfo:string
-  publishtime: string
-}>
-export const getScriptPages = (queryCondition: QueryCondition = {}) => {
+export type QueryResult =Result<Item[]>
+
+export const getPages = (queryCondition: QueryCondition = {}) => {
   return request<Common<QueryResult>>({
     method: 'POST',
-    url: '/api/script/getScriptPages',
+    url: '/api/script/getPages',
     data: queryCondition,
   })
 }
 
-type CreateOrEnditscript = Partial<scriptItem>
+type CreateOrEnditscript = Partial<InItem>
 export const saveOrUpdate = (data: CreateOrEnditscript) => {
   return request<Common<boolean>>({
     method: 'POST',
@@ -83,24 +93,24 @@ export const deleteScript = (id: number) => {
   })
 }
 
-export const enablesSriptStatus = (scriptId: number) => {
+export const enablesSriptStatus = (script_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/script/saveOrUpdate',
     data: {
-      id: scriptId,
+      id: script_id,
       linestatus: 'ENABLE',
       status:"文案待制作"
     },
   })
 }
 
-export const enablescopystatus = (scriptId: number) => {
+export const enablescopystatus = (script_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/script/saveOrUpdate',
     data: {
-      id: scriptId,
+      id: script_id,
       copystatus: 'ENABLE',
       status:"视频待制作"
     },

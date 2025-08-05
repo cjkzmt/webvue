@@ -1,6 +1,6 @@
 import {
   saveOrUpdate,
-  getScriptPages,
+  getPages,
   deleteScript,
   addTask,
   refreshTask,
@@ -17,21 +17,22 @@ export const forminstance = ref<FormInstance>()
 const isCreate = ref(true)
 const formInitialValues = {
   id: 0,
-  VideoTemplateId: -1,
-  topicId: -1,
-  copyId: -1,
-  PromptTextId: -1,
+  VideoTemplate_id: -1,
+  topic_id: -1,
+  copy_id: -1,
+  PromptText_id: -1,
   title: '',
-  ScriptId: -1,
+  Script_id: -1,
   cover: '',
   line: '',
   subtitle: '',
   reading: '',
-  FontId: -1,
+  Font_id: -1,
   publishtime: '',
   videoname: '',
-  MusicId: -1,
-  VoiceOverId:-1
+  Music_id: -1,
+  VoiceOver_id:-1,
+  AccountTeam_id:-1,
 }
 export const form = reactive({...formInitialValues})
 
@@ -73,7 +74,7 @@ export const queriedResult = ref({} as QueryResult)
 //动作
 export const queryScript = async (params?: QueryCondition) => {
   Object.assign(queryCondition.value, params)
-  const { data } = await getScriptPages(queryCondition.value)
+  const { data } = await getPages(queryCondition.value)
   if (data.code === '000000') {
     queriedResult.value = data.data
     console.log('脚本视频任务数据:', data.data) // 添加打印数据

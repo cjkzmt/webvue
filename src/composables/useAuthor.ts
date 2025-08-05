@@ -1,6 +1,6 @@
 import {
   saveOrUpdate,
-  getAuthorPages,
+  getPages,
   deleteAuthor,
   enableAuthor, forbidAuthor,
   type QueryCondition,
@@ -38,7 +38,7 @@ export const msgText = ref('')
 const distext = ref('作者链接')
 export const queryAuthor = async (params?: QueryCondition) => {
   Object.assign(queryCondition.value, params)
-  const { data } = await getAuthorPages(queryCondition.value)
+  const { data } = await getPages(queryCondition.value)
   if (data.code === '000000') {
     queriedResult.value = data.data
     console.log('用户数据:', data.data) // 添加打印数据

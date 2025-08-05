@@ -10,10 +10,10 @@ export type MenuItem = {
   level: number
   orderNum: number
   show: boolean
-  parentId: number | null
+  parent_id: number | null
   createdBy: string
   createdTime: string
-  operatorId: number | null
+  operator_id: number | null
   updatedBy: string | null
   updatedTime: string | null
 }
@@ -31,7 +31,7 @@ export const getAll = () => {
 // type CreateOrEnditMenu = Partial<MenuItem>
 export type CreateOrEnditMenu = Pick<
   MenuItem,
-  'parentId' | 'name' | 'href' | 'icon' | 'orderNum' | 'description' | 'show'
+  'parent_id' | 'name' | 'href' | 'icon' | 'orderNum' | 'description' | 'show'
 > & { id?: number }
 export const saveOrUpdate = (menuInfo: CreateOrEnditMenu) => {
   return request<Common<boolean>>({

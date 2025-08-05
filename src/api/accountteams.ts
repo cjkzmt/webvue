@@ -1,40 +1,48 @@
 import request from '@/utils/request'
-import type {Common ,Result} from '@/utils/QueryResult'
-export type TopAccountTeams = {
+import type {Common ,Result,Condition} from '@/utils/QueryResult'
+
+export type QueryCondition = Partial<Condition&{
+  number: number
+}>
+
+export type TopItem = {
   id: number
   number: number
   scope: string}
-type accountteamItem = TopAccountTeams&{
-  PhoneId:number
-  Phone: string
+type InItem = TopItem&{
+  Computer_id: number
+  TeamOwner_id: number
+  Phone_id: number
   TypeVideo_id: number
-  TypeVideo: string
   TypeCover_id: number
+  TypeSubtitle_id: number}
+
+type Item = InItem&{
+  Computer: string
+  shorthand: string
+  TypeVideo: string
+  Phone: string
   TypeCover: string
-  TypeSubtitle_id: number
   TypeSubtitle: string
   createdTime: string
+  videoheight: number
+  videowidth: number
+  fixedtitle: string
+  fontsize: number
+  fontcolor: string
   status: 'ENABLE' | 'DISABLE'}
-export type QueryResult = Result<accountteamItem[]>
-export type QueryCondition = Partial<{
-  currentPage: number // 查询的当前页码
-  pageSize: number // 每页显示的记录数
-  accountteamName: string // 手机名查询条件，用于筛选手机名匹配的手机
-  Brand: string // 电话号码查询条件，用于筛选电话号码匹配的手机
-  accountteamId: number // 手机ID查询条件，用于筛选特定手机ID的手机
-  statCreateTime: string // 开始创建时间，用于筛选创建时间范围的起始时间
-  endCreateTime: string // 结束创建时间，用于筛选创建时间范围的结束时间
-}>
 
-export const getAccountTeamPages = (queryCondition: QueryCondition = {}) => {
+export type QueryResult = Result<Item[]>
+
+export const getPages = (queryCondition: QueryCondition = {}) => {
   return request<Common<QueryResult>>({
     method: 'POST',
-    url: '/api/accountteam/getAccountTeamPages',
+    url: '/api/accountteam/getPages',
     data: queryCondition,
   })
 }
 
-type CreateOrEnditaccountteam = Partial<accountteamItem>
+type CreateOrEnditaccountteam = Partial<InItem>
 export const saveOrUpdate = (data: CreateOrEnditaccountteam) => {
   return request<Common<boolean>>({
     method: 'POST',
@@ -56,30 +64,30 @@ export const deleteAccountTeam = (id: number) => {
   })
 }
 
-export const enableAccountTeam = (accountteamId: number) => {
+export const enableAccountTeam = (accountteam_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/accountteam/saveOrUpdate',
     data: {
-      id: accountteamId,
+      id: accountteam_id,
       status: 'ENABLE',
     },
   })
 }
 
-export const forbidAccountTeam = (accountteamId: number) => {
+export const forbidAccountTeam = (accountteam_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/accountteam/saveOrUpdate',
     data: {
-      id: accountteamId,
+      id: accountteam_id,
       status: 'DISABLE',
     },
   })
 }
 
-export const getTopAccountTeams = () => {
-  return request<Common<TopAccountTeams[]>>({
+export const TopIteams = () => {
+  return request<Common<TopItem[]>>({
     method: 'GET',
     url: '/api/accountteam/TopIteams',
   }).catch((error) => {

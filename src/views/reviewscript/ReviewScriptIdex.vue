@@ -22,7 +22,7 @@ const dlgCreateOrEdit = ref<InstanceType<typeof DlgScriptCreateOrEdit>>()
       </el-form-item>
       <el-form-item label="任务ID">
         <el-input
-          v-model="queryCondition.ScriptId"
+          v-model="queryCondition.id"
           placeholder="请输入任务ID"
           clearable
           oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^([2-9]|[1-9][0-9])$/, (match) => Math.min(28, match))"
@@ -96,11 +96,11 @@ const dlgCreateOrEdit = ref<InstanceType<typeof DlgScriptCreateOrEdit>>()
       v-model:current-page="queriedResult.current"
       v-model:page-size="queriedResult.size"
       :page-sizes="[30, 80, 150, 200]"
-      :background="true"
+      background
       layout="total, sizes, prev, pager, next, jumper"
       :total="queriedResult.total"
-      @size-change="(pageSize: number) => queryScript({ pageSize, currentPage: 1 })"
-      @current-change="(currentPage: number) => queryScript({ currentPage })"
+      @update:current-page="(currentPage: number) => queryScript({ currentPage })"
+      @update:page-size="(pageSize: number) => queryScript({ pageSize, currentPage: 1 })"
     />
     <DlgScriptCreateOrEdit ref="dlgCreateOrEdit" />
   </el-card>

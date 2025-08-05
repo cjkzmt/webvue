@@ -17,8 +17,8 @@ defineExpose({initAndShow})
       <el-form-item label="简称" :label-width="formLabelWidth" prop="shorthand">
         <el-input v-model="form.shorthand" autocomplete="off" />
       </el-form-item>
-      <el-form-item label="店铺名" :label-width="formLabelWidth" prop="alias">
-        <el-input v-model="form.alias" autocomplete="off" />
+      <el-form-item label="排序" :label-width="formLabelWidth" prop="sort">
+        <el-input v-model="form.sort" autocomplete="off" />
       </el-form-item>
       <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
         <el-input v-model="form.name" autocomplete="off" />
@@ -32,11 +32,20 @@ defineExpose({initAndShow})
       <el-form-item label="手机号" :label-width="formLabelWidth" prop="number">
         <el-input v-model="form.number" autocomplete="off" />
       </el-form-item>
+       <el-form-item label="素材文件" :label-width="formLabelWidth" prop="path">
+        <el-input v-model="form.path" autocomplete="off" />
+      </el-form-item>
+       <el-form-item label="业务范围" :label-width="formLabelWidth" prop="scope">
+        <el-input v-model="form.scope" autocomplete="off" />
+      </el-form-item>
       <el-form-item label="地址" :label-width="formLabelWidth" prop="address">
         <el-input v-model="form.address" autocomplete="off" />
       </el-form-item>
       <el-form-item label="备注" :label-width="formLabelWidth" prop="note">
         <el-input v-model="form.note" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="店铺名" :label-width="formLabelWidth" prop="alias">
+        <el-input v-model="form.alias" autocomplete="off" />
       </el-form-item>
     </el-form>
     <template #footer>

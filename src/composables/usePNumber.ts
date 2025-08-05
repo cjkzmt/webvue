@@ -1,8 +1,8 @@
 import {
   saveOrUpdate,
-  getPNumberPages,
+  getPages,
   deletePNumber,
-  getTopPNumbers,enablePNumber, forbidPNumber,
+  TopIteams,enablePNumber, forbidPNumber,
   type TopPNumbers,
   type QueryCondition,
   type QueryResult,
@@ -18,7 +18,7 @@ const formInitialValues = {
   code:0,
   rent: 0,
   Owner: '',
-  PhoneId: -1,
+  Phone_id: -1,
   Phone: '',
 }
 export const form = reactive({...formInitialValues})
@@ -62,7 +62,7 @@ export const queriedResult = ref({} as QueryResult)
 //动作
 export const queryPNumber = async (params?: QueryCondition) => {
   Object.assign(queryCondition.value, params)
-  const { data } = await getPNumberPages(queryCondition.value)
+  const { data } = await getPages(queryCondition.value)
   if (data.code === '000000') {
     queriedResult.value = data.data
     console.log('用户数据:', data.data) // 添加打印数据
@@ -75,7 +75,7 @@ export const queryPNumber = async (params?: QueryCondition) => {
 export const topPNumbers = ref([] as TopPNumbers[])
 export const fetchTopPNumbers = async () => {
   try {
-    const { data } = await getTopPNumbers()
+    const { data } = await TopIteams()
     topPNumbers.value = data.data
   } catch (error) {
     console.error('获取手机列表失败:', error)

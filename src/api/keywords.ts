@@ -3,22 +3,14 @@ import type {Common } from '@/utils/QueryResult'
 
 export type Item = {
   id: number
-  name: string
+  test: string
   sort: number
-  English:string
-  character:number
-  keycount:number
-  verification:string
-  publish: 'ENABLE' | 'DISABLE'
-  publishurl:string
-  Scrapeurl:string
-  publishverif:string
 }
 
 export const getAll = () => {
   return request<Common<Item[]>>({
     method: 'GET',
-    url: '/api/platform/getAll',
+    url: '/api/keyword/getAll',
   }).catch((error) => {
     console.error('获取平台信息失败', error)
     throw new Error('获取平台信息失败')
@@ -30,7 +22,7 @@ export type CreateOrEnditPlatform = Partial<Item>
 export const saveOrUpdate = (PlatformInfo: CreateOrEnditPlatform) => {
   return request<Common<boolean>>({
     method: 'POST',
-    url: '/api/platform/saveOrUpdate',
+    url: '/api/keyword/saveOrUpdate',
     data: PlatformInfo,
   }).catch((error) => {
     console.error('添加平台信息失败', error)
@@ -38,33 +30,33 @@ export const saveOrUpdate = (PlatformInfo: CreateOrEnditPlatform) => {
   })
 }
 
-export const deletePlatform = (id: number) => {
+export const deleteiteam = (id: number) => {
   return request<Common<boolean>>({
     method: 'DELETE',
-    url: `/api/platform/${id}`,
+    url: `/api/keyword/${id}`,
   }).catch((error) => {
     console.error('删除平台信息失败', error)
     throw new Error('删除平台信息失败')
   })
 }
 
-export const enablepublish = (platform_id: number) => {
+export const enablepublish = (id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
-    url: '/api/platform/saveOrUpdate',
+    url: '/api/keyword/saveOrUpdate',
     data: {
-      id: platform_id,
+      id: id,
       publish: 'ENABLE' ,
     },
   })
 }
 
-export const forbidpublish = (platform_id: number) => {
+export const forbidpublish = (id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
-    url: '/api/platform/saveOrUpdate',
+    url: '/api/keyword/saveOrUpdate',
     data: {
-      id: platform_id,
+      id: id,
       publish:'DISABLE',
     },
   })

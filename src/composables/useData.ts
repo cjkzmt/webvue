@@ -1,12 +1,12 @@
 import {
   getPages,
-  deleteApiToken,
+  deleteData,
   saveOrUpdate,
-  enableApiToken,
-  forbidApiToken,
+  enableData,
+  forbidData,
   type QueryCondition,
   type QueryResult,
-} from '@/api/apitokens'
+} from '@/api/datas'
 import {  reactive, ref } from 'vue'
 import { ElMessage} from 'element-plus'
 
@@ -24,14 +24,11 @@ export const forminstance = ref<FormInstance>()
 const isCreate = ref(true)
 const formInitialValues = {
   id: 0,
-  AiApi_id: -1,
-  PNumber_id: -1,
-  token: ''
 }
 export const form = reactive({...formInitialValues})
 
 //动作
-export const queryApiToken = async (params?: QueryCondition) => {
+export const queryData = async (params?: QueryCondition) => {
   Object.assign(queryCondition.value, params)
   const { data } = await getPages(queryCondition.value)
   if (data.code === '000000') {
@@ -46,7 +43,7 @@ export const onSubmit = async () => {
   const { data } = await saveOrUpdate(form).finally(() => (dialogFormVisible.value = false))
   if (data.code === '000000') {
     ElMessage.success(`${msgText.value}账号成功`)
-    queryApiToken()
+    queryData()
   } else {
     ElMessage.error(`${msgText.value}账号失败`)
     throw new Error(`${msgText.value}账号失败`)
@@ -73,12 +70,12 @@ export const initAndShow = (id = 0) => {
 
 import {createHandler ,createDeleteHandler } from '@/utils/Common'
 export const handleDelete = createDeleteHandler({
-  deleteFn: deleteApiToken,
-  refresh: queryApiToken,
+  deleteFn: deleteData,
+  refresh: queryData,
   getDisplayName: () => distext.value
 })
 export const handleStatusChange = createHandler(
-  enableApiToken,
-  forbidApiToken,
-  queryApiToken
+  enableData,
+  forbidData,
+  queryData
 )

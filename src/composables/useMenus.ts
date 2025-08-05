@@ -22,7 +22,7 @@ export function useMenus() {
   const form = ref<CreateOrEnditMenu>({
     name: '',
     href: '',
-    parentId: -1,
+    parent_id: -1,
     description: '',
     icon: '',
     show: true,

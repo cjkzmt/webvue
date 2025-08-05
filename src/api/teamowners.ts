@@ -1,38 +1,40 @@
 import request from '@/utils/request'
-import type {Common ,Result} from '@/utils/QueryResult'
-export type TopTeamOwners = {
+import type {Common ,Result,Condition} from '@/utils/QueryResult'
+export type QueryCondition = Partial<Condition&{
+  number: number
+}>
+export type TopItem = {
   id: number
   shorthand:string
 }
-type TeamOwnerItem = TopTeamOwners& {
+type InItem = TopItem& {
   name: string
   alias: string
   Title:string
   number: number
   address: string
   email: string
+  path: string
+  scope: string
+  clipSum: number
+  sort: number
   note:string
+}
+type Item = InItem& {
   createdTime: string
   status: 'ENABLE' | 'DISABLE'
 }
-export type QueryResult = Result<TeamOwnerItem[]>
-export type QueryCondition = Partial<{
-  currentPage: number // 查询的当前页码
-  pageSize: number // 每页显示的记录数
-  status: string // 电话号码查询条件，用于筛选电话号码匹配的电脑
-  TeamOwnerId: number // 电脑ID查询条件，用于筛选特定电脑ID的电脑
-  statCreateTime: string // 开始创建时间，用于筛选创建时间范围的起始时间
-  endCreateTime: string // 结束创建时间，用于筛选创建时间范围的结束时间
-}>
-export const getTeamOwnerPages = (queryCondition: QueryCondition = {}) => {
+export type QueryResult = Result<Item[]>
+
+export const getPages = (queryCondition: QueryCondition = {}) => {
   return request<Common<QueryResult>>({
     method: 'POST',
-    url: '/api/teamowner/getTeamOwnerPages',
+    url: '/api/teamowner/getPages',
     data: queryCondition,
   })
 }
 
-type CreateOrEnditTeamOwner = Partial<TeamOwnerItem>
+type CreateOrEnditTeamOwner = Partial<InItem>
 export const saveOrUpdate = (data: CreateOrEnditTeamOwner) => {
   return request<Common<boolean>>({
     method: 'POST',
@@ -54,32 +56,32 @@ export const deleteTeamOwner = (id: number) => {
   })
 }
 
-export const enableTeamOwner = (TeamOwnerId: number) => {
+export const enableTeamOwner = (TeamOwner_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/teamowner/saveOrUpdate',
     data: {
-      id: TeamOwnerId,
+      id: TeamOwner_id,
       status: 'ENABLE',
     },
   })
 }
 
-export const forbidTeamOwner = (TeamOwnerId: number) => {
+export const forbidTeamOwner = (TeamOwner_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/teamowner/saveOrUpdate',
     data: {
-      id: TeamOwnerId,
+      id: TeamOwner_id,
       status: 'DISABLE',
     },
   })
 }
 
-export const getTopTeamOwners = () => {
-  return request<Common<TopTeamOwners[]>>({
+export const TopIteams = () => {
+  return request<Common<TopItem[]>>({
     method: 'GET',
-    url: '/api/teamowner/TopTeamOwners',
+    url: '/api/teamowner/TopIteams',
   }).catch((error) => {
     console.error('获取菜单信息失败', error)
     throw new Error('获取菜单信息失败')

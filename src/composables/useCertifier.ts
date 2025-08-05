@@ -1,10 +1,10 @@
 import {
   saveOrUpdate,
-  getCertifierPages,
+  getPages,
   deleteCertifier,
-  getTopCertifiers,
+  TopIteams,
   enableCertifier, forbidCertifier,
-  type TopCertifiers,
+  type TopItem,
   type QueryCondition,
   type QueryResult,
 } from '@/api/certifiers'
@@ -60,7 +60,7 @@ export const queriedResult = ref({} as QueryResult)
 //动作
 export const queryCertifier = async (params?: QueryCondition) => {
   Object.assign(queryCondition.value, params)
-  const { data } = await getCertifierPages(queryCondition.value)
+  const { data } = await getPages(queryCondition.value)
   if (data.code === '000000') {
     queriedResult.value = data.data
     console.log('用户数据:', data.data) // 添加打印数据
@@ -70,10 +70,10 @@ export const queryCertifier = async (params?: QueryCondition) => {
   }
 }
 
-export const topCertifiers = ref([] as TopCertifiers[])
+export const topCertifiers = ref([] as TopItem[])
 export const fetchTopCertifiers = async () => {
   try {
-    const { data } = await getTopCertifiers()
+    const { data } = await TopIteams()
     topCertifiers.value = data.data
   } catch (error) {
     console.error('获取手机列表失败:', error)

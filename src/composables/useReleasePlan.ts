@@ -1,8 +1,9 @@
-import { getAll, saveOrUpdate, deleteReleasePlan, type ReleasePlanItem } from '@/api/releaseplan'
+import { getAll, saveOrUpdate, deleteReleasePlan, type Item } from '@/api/releaseplan'
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
+export const distext = '发布计划'
 //保存数据
-export const allReleasePlan = ref([] as ReleasePlanItem[])
+export const allReleasePlan = ref([] as Item[])
 //获取所有资源分类
 export const getAllReleasePlan = async () => {
   const { data } = await getAll()
@@ -47,10 +48,10 @@ export const onSubmit = async () => {
 }
 
 export const dialogFormVisible = ref(false)
-const distext = ref('账号组')
+
 import {createDeleteHandler } from '@/utils/Common'
 export const DeleteReleasePlan = createDeleteHandler({
   deleteFn: deleteReleasePlan,
   refresh: getAllReleasePlan,
-  getDisplayName: () => distext.value
+  getDisplayName: () => distext
 })

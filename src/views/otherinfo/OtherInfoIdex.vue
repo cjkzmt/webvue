@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import { allPlatform, getAllPlatform, DeletePlatform ,handlepublishChange} from '@/composables/usePlatform'
+import { allKeyword, getAllKeyword, DeleteKeyword } from '@/composables/useKeyword'
 import { allReleasePlan, getAllReleasePlan, DeleteReleasePlan } from '@/composables/useReleasePlan'
 import { allTypeText, getAllTypeText, DeleteTypeText, handletopicChange , handlecopyChange, handleStatusChange } from '@/composables/useTypeText'
 import DlgPlatformCreateOrEdit from './DlgPlatformCreateOrEdit.vue'
 import DlgReleasePlanCreateOrEdit from './DlgReleasePlanCreateOrEdit.vue'
 import DlgTypeTextCreateOrEdit from './DlgTypeTextCreateOrEdit.vue'
+import DlgKeywordCreateOrEdit from './DlgKeywordCreateOrEdit.vue'
 import { ref } from 'vue'
+getAllKeyword()
 getAllPlatform()
 getAllReleasePlan()
 getAllTypeText()
 const dlgPlatformCreateOrEdit = ref<InstanceType<typeof DlgPlatformCreateOrEdit>>()
+const dlgKeywordCreateOrEdit = ref<InstanceType<typeof DlgKeywordCreateOrEdit>>()
 const dlgTypeTextCreateOrEdit = ref<InstanceType<typeof DlgTypeTextCreateOrEdit>>()
 const dlgReleasePlanCreateOrEdit = ref<InstanceType<typeof DlgReleasePlanCreateOrEdit>>()
 </script>
@@ -28,10 +32,18 @@ const dlgReleasePlanCreateOrEdit = ref<InstanceType<typeof DlgReleasePlanCreateO
       </div>
     </template>
     <el-table :data="allPlatform" border label-width="120px" style="width: 100%">
-      <el-table-column type="index" label="序号" align="center" />
-      <el-table-column prop="name" label="平台" align="center" />
-      <el-table-column prop="sort" label="排序" align="center" />
-      <el-table-column label="是否发布" align="center" v-slot="{ row }">
+      <el-table-column type="index" label="序号" width="100"  align="center" />
+      <el-table-column prop="name" label="平台" width="100"  align="center" />
+      <el-table-column prop="English" label="English" width="130"   align="center" />
+      <el-table-column prop="character" label="标题字数" width="130"   align="center" />
+      <el-table-column prop="keycount" label="关键词数" width="130"   align="center" />
+      <el-table-column prop="verification" label="验证信息" width="130"   align="center" />
+      <el-table-column prop="advance" label="预发天数" width="130"   align="center" />
+      <el-table-column prop="sort" label="排序" width="80"  align="center" />
+      <el-table-column prop="publishurl" label="发布链接" align="center" />
+      <el-table-column prop="publishverif" label="验证链接" align="center" />
+      <el-table-column prop="Scrapeurl" label="采集链接" align="center" />
+      <el-table-column label="是否发布" width="160" align="center" v-slot="{ row }">
         <el-switch
           v-model="row.publish"
           class="mb-2"
@@ -43,7 +55,7 @@ const dlgReleasePlanCreateOrEdit = ref<InstanceType<typeof DlgReleasePlanCreateO
         />
       </el-table-column>
 
-      <el-table-column label="操作" align="center" v-slot="{ row }">
+      <el-table-column label="操作" width="160" align="center" v-slot="{ row }">
         <el-button type="primary" @click="dlgPlatformCreateOrEdit?.initAndShow(row.id)"
           >编辑</el-button
         >
@@ -51,6 +63,31 @@ const dlgReleasePlanCreateOrEdit = ref<InstanceType<typeof DlgReleasePlanCreateO
       </el-table-column>
     </el-table>
     <DlgPlatformCreateOrEdit ref="dlgPlatformCreateOrEdit" />
+  </el-card>
+  <el-card class="box-card2">
+    <template #header>
+      <div
+        class="box-card2"
+        style="display: flex; justify-content: space-between; align-items: center"
+      >
+        <h3>关键词</h3>
+        <el-button class="button" type="primary" @click="dlgKeywordCreateOrEdit?.initAndShow()"
+          >添加关键词</el-button
+        >
+      </div>
+    </template>
+    <el-table :data="allKeyword" border label-width="120px" style="width: 100%">
+      <el-table-column type="index" label="序号" width="180" align="center" />
+      <el-table-column prop="text" label="关键词" align="center" />
+      <el-table-column prop="sort" label="排序" align="center" />
+      <el-table-column label="操作" align="center" v-slot="{ row }">
+        <el-button type="primary" @click="dlgKeywordCreateOrEdit?.initAndShow(row.id)"
+          >编辑</el-button
+        >
+        <el-button type="danger" @click="DeleteKeyword(row.id)">删除</el-button>
+      </el-table-column>
+    </el-table>
+    <DlgKeywordCreateOrEdit ref="dlgKeywordCreateOrEdit" />
   </el-card>
 
   <el-card class="box-card2">

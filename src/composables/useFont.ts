@@ -1,6 +1,6 @@
 import {
   saveOrUpdate,
-  getFontPages,
+  getPages,
   deleteFont,enableFont, forbidFont,
   type QueryCondition,
   type QueryResult,
@@ -47,7 +47,7 @@ export const queriedResult = ref({} as QueryResult)
 //动作
 export const queryFont = async (params?: QueryCondition) => {
   Object.assign(queryCondition.value, params)
-  const { data } = await getFontPages(queryCondition.value)
+  const { data } = await getPages(queryCondition.value)
   if (data.code === '000000') {
     queriedResult.value = data.data
     console.log('字体数据:', data.data) // 添加打印数据
@@ -66,11 +66,11 @@ export const onSubmit = async () => {
     throw new Error(`${msgText.value}字体失败`)
   }
 }
-import { getTopFonts, type TopFonts } from '@/api/fonts'
-export const topFonts = ref([] as TopFonts[])
+import { TopIteams, type TopItem } from '@/api/fonts'
+export const topFonts = ref([] as TopItem[])
 export const fetchTopFonts = async () => {
   try {
-    const { data } = await getTopFonts()
+    const { data } = await TopIteams()
     topFonts.value = data.data
   } catch (error) {
     console.error('获取手机列表失败:', error)

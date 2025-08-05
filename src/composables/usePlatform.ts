@@ -1,8 +1,8 @@
-import { getAll, saveOrUpdate, deletePlatform, enablepublish,forbidpublish,type PlatformItem } from '@/api/platform'
+import { getAll, saveOrUpdate, deletePlatform, enablepublish,forbidpublish,type Item } from '@/api/platform'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref } from 'vue'
 //保存数据
-export const allPlatform = ref([] as PlatformItem[])
+export const allPlatform = ref([] as Item[])
 //获取所有平台
 export const getAllPlatform = async () => {
   const { data } = await getAll()
@@ -18,6 +18,14 @@ export const forminstance = ref<FormInstance>()
 export const form = reactive({
   name: '',
   sort: 0,
+  English: '',
+  publishurl: '',
+  Scrapeurl: '',
+  character:30,
+  keycount:5,
+  verification:'',
+  advance: 13,
+  publishverif: '',
 })
 export const initAndShow = (id = 0) => {
   forminstance.value?.resetFields()

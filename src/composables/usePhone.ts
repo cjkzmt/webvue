@@ -1,11 +1,11 @@
 import {
   saveOrUpdate,
-  getPhonePages,
+  getPages,
   deletePhone,
-  getTopPhones,enablePhone, forbidPhone,
+  TopIteams,enablePhone, forbidPhone,
   type QueryCondition,
   type QueryResult,
-  type TopPhones
+  type TopItem
 } from '@/api/phones'
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
@@ -61,7 +61,7 @@ export const queriedResult = ref({} as QueryResult)
 //动作
 export const queryPhone = async (params?: QueryCondition) => {
   Object.assign(queryCondition.value, params)
-  const { data } = await getPhonePages(queryCondition.value)
+  const { data } = await getPages(queryCondition.value)
   if (data.code === '000000') {
     queriedResult.value = data.data
     console.log('用户数据:', data.data) // 添加打印数据
@@ -71,11 +71,11 @@ export const queryPhone = async (params?: QueryCondition) => {
   }
 }
 
-export const topPhones = ref([] as TopPhones[])
+export const topPhones = ref([] as TopItem[])
 
 export const fetchTopPhones = async () => {
   try {
-    const { data } = await getTopPhones()
+    const { data } = await TopIteams()
     topPhones.value = data.data
   } catch (error) {
     console.error('获取账号组列表失败:', error)

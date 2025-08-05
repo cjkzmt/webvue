@@ -1,11 +1,11 @@
 import {
   saveOrUpdate,
-  getMusicPages,
+  getPages,
   deleteMusic,
-  getTopMusics,enableMusic, forbidMusic,
+  TopIteams,enableMusic, forbidMusic,
   type QueryCondition,
   type QueryResult,
-  type TopMusics
+  type TopItem
 } from '@/api/musics'
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
@@ -57,7 +57,7 @@ export const queriedResult = ref({} as QueryResult)
 //动作
 export const queryMusic = async (params?: QueryCondition) => {
   Object.assign(queryCondition.value, params)
-  const { data } = await getMusicPages(queryCondition.value)
+  const { data } = await getPages(queryCondition.value)
   if (data.code === '000000') {
     queriedResult.value = data.data
     console.log('音乐数据:', data.data) // 添加打印数据
@@ -68,10 +68,10 @@ export const queryMusic = async (params?: QueryCondition) => {
 }
 
 
-export const topMusics = ref([] as TopMusics[])
+export const topMusics = ref([] as TopItem[])
 export const fetchTopMusics = async () => {
   try {
-    const { data } = await getTopMusics()
+    const { data } = await TopIteams()
     topMusics.value = data.data
   } catch (error) {
     console.error('获取手机列表失败:', error)

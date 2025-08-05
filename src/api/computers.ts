@@ -1,28 +1,29 @@
 import request from '@/utils/request'
-import type {Common ,Result} from '@/utils/QueryResult'
-type computerItem = {
-  id: number
+import type {Common ,Result,Condition} from '@/utils/QueryResult'
+export type QueryCondition = Partial<Condition&{
   name: string
-  uniqueId: string
-  createdTime: string
+}>
+
+export type TopItem = {
+  id: number
+  name: string}
+
+type InItem = TopItem&{ Verification: string}
+
+type Item = InItem&{
   createtext:  'ENABLE' | 'DISABLE'
   createvideo:  'ENABLE' | 'DISABLE'
   publishvideo:  'ENABLE' | 'DISABLE'
   status: 'ENABLE' | 'DISABLE'}
-export type QueryResult = Result<computerItem[]>
-type CreateOrEnditcomputer = Partial<computerItem>
-export type QueryCondition = Partial<{
-  currentPage: number // 查询的当前页码
-  pageSize: number // 每页显示的记录数
-  status: string // 电话号码查询条件，用于筛选电话号码匹配的电脑
-  computerId: number // 电脑ID查询条件，用于筛选特定电脑ID的电脑
-  statCreateTime: string // 开始创建时间，用于筛选创建时间范围的起始时间
-  endCreateTime: string // 结束创建时间，用于筛选创建时间范围的结束时间
-}>
-export const getComputerPages = (queryCondition: QueryCondition = {}) => {
+
+
+export type QueryResult = Result<Item[]>
+type CreateOrEnditcomputer = Partial<InItem>
+
+export const getPages = (queryCondition: QueryCondition = {}) => {
   return request<Common<QueryResult>>({
     method: 'POST',
-    url: '/api/computer/getComputerPages',
+    url: '/api/computer/getPages',
     data: queryCondition,
   })
 }
@@ -47,90 +48,100 @@ export const deleteComputer = (id: number) => {
   })
 }
 
-export const enableComputer = (computerId: number) => {
+export const enableComputer = (computer_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/computer/saveOrUpdate',
     data: {
-      id: computerId,
+      id: computer_id,
       status: 'ENABLE',
     },
   })
 }
 
-export const forbidComputer = (computerId: number) => {
+export const forbidComputer = (computer_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/computer/saveOrUpdate',
     data: {
-      id: computerId,
+      id: computer_id,
       status: 'DISABLE',
     },
   })
 }
 
-export const enablecreatetext = (computerId: number) => {
+export const enablecreatetext = (computer_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/computer/saveOrUpdate',
     data: {
-      id: computerId,
+      id: computer_id,
       createtext: 'ENABLE',
     },
   })
 }
 
-export const forbidcreatetext = (computerId: number) => {
+export const forbidcreatetext = (computer_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/computer/saveOrUpdate',
     data: {
-      id: computerId,
+      id: computer_id,
       createtext: 'DISABLE',
     },
   })
 }
 
-export const enablecreatevideo = (computerId: number) => {
+export const enablecreatevideo = (computer_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/computer/saveOrUpdate',
     data: {
-      id: computerId,
+      id: computer_id,
       createvideo: 'ENABLE',
     },
   })
 }
 
-export const forbidcreatevideo = (computerId: number) => {
+export const forbidcreatevideo = (computer_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/computer/saveOrUpdate',
     data: {
-      id: computerId,
+      id: computer_id,
       createvideo: 'DISABLE',
     },
   })
 }
 
-export const enablepublishvideo = (computerId: number) => {
+export const enablepublishvideo = (computer_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/computer/saveOrUpdate',
     data: {
-      id: computerId,
+      id: computer_id,
       publishvideo: 'ENABLE',
     },
   })
 }
 
-export const forbidpublishvideo = (computerId: number) => {
+export const forbidpublishvideo = (computer_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/computer/saveOrUpdate',
     data: {
-      id: computerId,
+      id: computer_id,
       publishvideo: 'DISABLE',
     },
+  })
+}
+
+export const TopIteams = () => {
+  return request<Common<TopItem[]>>({
+    method: 'GET',
+    url: '/api/computer/TopIteams',
+  }).catch((error) => {
+    console.error('获取菜单信息失败', error)
+    throw new Error('获取菜单信息失败')
   })
 }

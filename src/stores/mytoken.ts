@@ -28,14 +28,14 @@ export const useTokenStore = defineStore('mytoken', () => {
 
       // 如果解析后的 token 是空对象，则提示用户未登录
       if (Object.keys(parsedToken).length === 0) {
-        // ElMessage.error('你还未登录，请重新登录')
+        ElMessage.error('你还未登录，请重新登录')
         window.localStorage.setItem('TokenInfo', '')
         return {} as Token
       }
-
       return parsedToken
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      // ElMessage.error('Token 解析失败，请重新登录')
+      ElMessage.error('Token 解析失败，请重新登录')
       window.localStorage.setItem('TokenInfo', '')
       return {} as Token
     }

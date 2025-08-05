@@ -1,34 +1,38 @@
 import request from '@/utils/request'
-import type {Common ,Result} from '@/utils/QueryResult'
-type authorItem = {
-  id: number // 手机的唯一标识符（手机ID）
+import type {Common ,Result,Condition} from '@/utils/QueryResult'
+export type QueryCondition = Partial<Condition&{
   name: string
-  number: number // 手机的名称或手机名
+}>
+
+type TopItem = {
+  id: number
+  name: string}
+
+type InItem = TopItem&{
+  number: number
   url: string
   urlnum: number
-  PlatformId: number
+  Platform_id: number
+}
+
+type Item = InItem&{
   Platform: string
   createdTime: string
   updatedTime: string
-  status: 'ENABLE' | 'DISABLE' // 手机的状态，取值为 "ENABLE" 或 "DISABLE"
+  status: 'ENABLE' | 'DISABLE'
 }
-export type QueryResult = Result<authorItem[]>
-export type QueryCondition = Partial<{
-  currentPage: number // 查询的当前页码
-  pageSize: number // 每页显示的记录数
-  AuthorId: number // 手机ID查询条件，用于筛选特定手机ID的手机
-  statCreateTime: string // 开始创建时间，用于筛选创建时间范围的起始时间
-  endCreateTime: string // 结束创建时间，用于筛选创建时间范围的结束时间
-}>
-export const getAuthorPages = (queryCondition: QueryCondition = {}) => {
+
+export type QueryResult = Result<Item[]>
+
+export const getPages = (queryCondition: QueryCondition = {}) => {
   return request<Common<QueryResult>>({
     method: 'POST',
-    url: '/api/author/getAuthorPages',
+    url: '/api/author/getPages',
     data: queryCondition,
   })
 }
 
-type CreateOrEnditauthor = Partial<authorItem>
+type CreateOrEnditauthor = Partial<InItem>
 export const saveOrUpdate = (data: CreateOrEnditauthor) => {
   return request<Common<boolean>>({
     method: 'POST',
@@ -50,23 +54,23 @@ export const deleteAuthor = (id: number) => {
   })
 }
 
-export const enableAuthor = (authorId: number) => {
+export const enableAuthor = (author_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/author/saveOrUpdate',
     data: {
-      id: authorId,
+      id: author_id,
       status: 'ENABLE',
     },
   })
 }
 
-export const forbidAuthor = (authorId: number) => {
+export const forbidAuthor = (author_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/author/saveOrUpdate',
     data: {
-      id: authorId,
+      id: author_id,
       status: 'DISABLE',
     },
   })

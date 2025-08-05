@@ -23,8 +23,8 @@ fetchTopCertifiers()
 <template>
   <el-dialog v-model="dialogFormVisible" :title="msgText + '账号'" width="500">
     <el-form :model="form" ref="forminstance">
-      <el-form-item label="所在组" :label-width="formLabelWidth" prop="AccountTeamId">
-        <el-select v-model="form.AccountTeamId" placeholder="请选择所在组">
+      <el-form-item label="所在组" :label-width="formLabelWidth" prop="AccountTeam_id">
+        <el-select v-model="form.AccountTeam_id" placeholder="请选择所在组">
           <el-option label="未知" :value="-1" />
           <el-option
             v-for="AccountTeam in topAccountTeams"
@@ -34,8 +34,8 @@ fetchTopCertifiers()
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="所在平台" :label-width="formLabelWidth" prop="PlatformId">
-        <el-select v-model="form.PlatformId" placeholder="请选择所在平台">
+      <el-form-item label="所在平台" :label-width="formLabelWidth" prop="Platform_id">
+        <el-select v-model="form.Platform_id" placeholder="请选择所在平台">
           <el-option label="未知" :value="-1" />
           <el-option
             v-for="Platform in allPlatform"
@@ -61,8 +61,8 @@ fetchTopCertifiers()
         <el-input v-model="form.note" autocomplete="off" />
       </el-form-item>
 
-      <el-form-item label="绑定手机号" :label-width="formLabelWidth" prop="PNumberId">
-        <el-select v-model="form.PNumberId" placeholder="请选择绑定手机号">
+      <el-form-item label="绑定手机号" :label-width="formLabelWidth" prop="PNumber_id">
+        <el-select v-model="form.PNumber_id" placeholder="请选择绑定手机号">
           <el-option label="未知" :value="-1" />
           <el-option
             v-for="AccountTeam in topPNumbers"
@@ -72,8 +72,8 @@ fetchTopCertifiers()
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="认证人" :label-width="formLabelWidth" prop="PNumberId">
-        <el-select v-model="form.PNumberId" placeholder="请选择认证人">
+      <el-form-item label="认证人" :label-width="formLabelWidth" prop="PNumber_id">
+        <el-select v-model="form.PNumber_id" placeholder="请选择认证人">
           <el-option label="未知" :value="-1" />
           <el-option
             v-for="Certifier in topCertifiers"

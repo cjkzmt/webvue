@@ -22,7 +22,7 @@ const dlgCreateOrEdit = ref<InstanceType<typeof DlgScriptCreateOrEdit>>()
       </el-form-item>
       <el-form-item label="任务ID">
         <el-input
-          v-model="queryCondition.ScriptId"
+          v-model="queryCondition.id"
           placeholder="请输入任务ID"
           clearable
           oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^([2-9]|[1-9][0-9])$/, (match) => Math.min(28, match))"

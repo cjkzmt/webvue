@@ -23,7 +23,7 @@ getAllTypeText()
         <el-input v-model="form.text" autocomplete="off" type="textarea" :rows="10" />
       </el-form-item>
       <el-form-item label="文案类型" :label-width="formLabelWidth">
-        <el-select v-model="form.TypeTextId" placeholder="请选择文案类型">
+        <el-select v-model="form.TypeText_id" placeholder="请选择文案类型">
           <el-option label="无文案类型" :value="-1" />
           <el-option
             v-for="typetext in allTypeText"
