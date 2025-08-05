@@ -1,6 +1,6 @@
 import {
   saveOrUpdate,
-  getOllamaPages,
+  getPages,
   deleteOllama, enableOllama, forbidOllama,
   type QueryCondition,
   type QueryResult,
@@ -49,7 +49,7 @@ export const queriedResult = ref({} as QueryResult)
 //动作
 export const queryOllama = async (params?: QueryCondition) => {
   Object.assign(queryCondition.value, params)
-  const { data } = await getOllamaPages(queryCondition.value)
+  const { data } = await getPages(queryCondition.value)
   if (data.code === '000000') {
     queriedResult.value = data.data
     console.log('用户数据:', data.data) // 添加打印数据

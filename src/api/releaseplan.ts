@@ -1,14 +1,14 @@
 import request from '@/utils/request'
 import type {Common } from '@/utils/QueryResult'
 
-export type ReleasePlanItem = {
+export type Item = {
   id: number
   hour: number
   minute: number
 }
 
 export const getAll = () => {
-  return request<Common<ReleasePlanItem[]>>({
+  return request<Common<Item[]>>({
     method: 'GET',
     url: '/api/releaseplan/getAll',
   }).catch((error) => {
@@ -17,7 +17,7 @@ export const getAll = () => {
   })
 }
 
-export type CreateOrEnditReleasePlan = Partial<ReleasePlanItem>
+export type CreateOrEnditReleasePlan = Partial<Item>
 export const saveOrUpdate = (ReleasePlanInfo: CreateOrEnditReleasePlan) => {
   return request<Common<boolean>>({
     method: 'POST',

@@ -1,13 +1,13 @@
 import {
   saveOrUpdate,
-  getVoiceOverPages,
   deleteVoiceOver,
-  getTopVoiceOvers,
+  TopIteams,
+  getPages,
   enableVoiceOver, forbidVoiceOver,
   type QueryCondition,
   type QueryResult,
-  type TopVoiceOvers
-} from '@/api/voiceovers'
+  type TopItem
+} from '@/api/overs'
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { type FormInstance } from 'element-plus'
@@ -20,7 +20,7 @@ const formInitialValues = {
   url:''
 }
 export const form = reactive({...formInitialValues})
-
+const distext = '配音'
 export const initAndShow = (id = 0) => {
   if (id) {
     isCreate.value = false
@@ -40,11 +40,11 @@ export const msgText = ref('')
 export const onSubmit = async () => {
   const { data } = await saveOrUpdate(form).finally(() => (dialogFormVisible.value = false))
   if (data.code === '000000') {
-    ElMessage.success(`${msgText.value}配音成功`)
+    ElMessage.success(`${msgText.value}${distext}成功`)
     queryVoiceOver()
   } else {
-    ElMessage.error(`${msgText.value}配音失败`)
-    throw new Error(`${msgText.value}配音失败`)
+    ElMessage.error(`${msgText.value}${distext}失败`)
+    throw new Error(`${msgText.value}${distext}失败`)
   }
 }
 
@@ -59,31 +59,31 @@ export const queriedResult = ref({} as QueryResult)
 //动作
 export const queryVoiceOver = async (params?: QueryCondition) => {
   Object.assign(queryCondition.value, params)
-  const { data } = await getVoiceOverPages(queryCondition.value)
+  const { data } = await getPages(queryCondition.value)
   if (data.code === '000000') {
     queriedResult.value = data.data
-    console.log('配音数据:', data.data) // 添加打印数据
+    console.log(`${distext}数据:`, data.data) // 添加打印数据
   } else {
-    ElMessage.error('获取配音列表失败' + data.mesg)
-    throw new Error('获取配音列表失败' + data.mesg)
+    ElMessage.error(`获取${distext}列表失败` + data.mesg)
+    throw new Error(`获取${distext}列表失败` + data.mesg)
   }
 }
 
-export const topVoiceOvers = ref([] as TopVoiceOvers[])
+export const topVoiceOvers = ref([] as TopItem[])
 export const fetchTopVoiceOvers = async () => {
   try {
-    const { data } = await getTopVoiceOvers()
+    const { data } = await TopIteams()
     topVoiceOvers.value = data.data
   } catch (error) {
-    console.error('获取手机列表失败:', error)
+    console.error(`获取${distext}列表失败`, error)
   }
 }
-const distext = ref('账号组')
+
 import {createHandler ,createDeleteHandler } from '@/utils/Common'
 export const handleDelete = createDeleteHandler({
   deleteFn: deleteVoiceOver,
   refresh: queryVoiceOver,
-  getDisplayName: () => distext.value
+  getDisplayName: () => distext
 })
 export const handleStatusChange = createHandler(
   enableVoiceOver,

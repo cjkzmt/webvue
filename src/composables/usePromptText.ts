@@ -1,6 +1,6 @@
 import {
   saveOrUpdate,
-  getPromptTextPages,
+  getPages,
   deletePromptText,enablePromptText, forbidPromptText,
   type QueryCondition,
   type QueryResult,
@@ -45,7 +45,7 @@ export const queriedResult = ref({} as QueryResult)
 //动作
 export const queryPromptText = async (params?: QueryCondition) => {
   Object.assign(queryCondition.value, params)
-  const { data } = await getPromptTextPages(queryCondition.value)
+  const { data } = await getPages(queryCondition.value)
   if (data.code === '000000') {
     queriedResult.value = data.data
     console.log('提示词数据:', data.data) // 添加打印数据

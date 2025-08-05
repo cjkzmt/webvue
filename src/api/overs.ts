@@ -1,39 +1,39 @@
 import request from '@/utils/request'
 import type {Common ,Result,Condition} from '@/utils/QueryResult'
-
 export type QueryCondition = Partial<Condition&{
-  name: string
-  idnumber: string
+  sex: string
 }>
 export type TopItem = {
   id: number
   name: string
 }
-type InItem =TopItem& {
-  idnumber: number
-  Owner: string
-}
+type InItem = TopItem& {
+  filename: string
+  url: string
+  createdTime: string
+  speed:number
+  sex: string
 
-type Item =InItem& {
+
+}
+type Item = InItem& {
   createdTime: string
   status: 'ENABLE' | 'DISABLE'
 }
-
-export type QueryResult = Result<Item[]>
+export type QueryResult =Result<Item[]>
 
 export const getPages = (queryCondition: QueryCondition = {}) => {
   return request<Common<QueryResult>>({
     method: 'POST',
-    url: '/api/certifier/getPages',
+    url: '/api/over/getPages',
     data: queryCondition,
   })
 }
-
-type CreateOrEnditcertifier = Partial<InItem>
-export const saveOrUpdate = (data: CreateOrEnditcertifier) => {
+type CreateOrEnditvoiceover = Partial<InItem>
+export const saveOrUpdate = (data: CreateOrEnditvoiceover) => {
   return request<Common<boolean>>({
     method: 'POST',
-    url: '/api/certifier/saveOrUpdate',
+    url: '/api/over/saveOrUpdate',
     data,
   }).catch((error) => {
     console.error('操作失败', error)
@@ -41,41 +41,42 @@ export const saveOrUpdate = (data: CreateOrEnditcertifier) => {
   })
 }
 
-export const deleteCertifier = (id: number) => {
+export const deleteVoiceOver = (id: number) => {
   return request<Common<boolean>>({
     method: 'DELETE',
-    url: `/api/certifier/${id}`,
+    url: `/api/over/${id}`,
   }).catch((error) => {
-    console.error('删除手机信息失败', error)
-    throw new Error('删除手机信息失败')
+    console.error('删除电脑信息失败', error)
+    throw new Error('删除电脑信息失败')
   })
 }
 
-export const enableCertifier = (certifier_id: number) => {
+export const enableVoiceOver = (voiceover_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
-    url: '/api/certifier/saveOrUpdate',
+    url: '/api/over/saveOrUpdate',
     data: {
-      id: certifier_id,
+      id: voiceover_id,
       status: 'ENABLE',
     },
   })
 }
 
-export const forbidCertifier = (certifier_id: number) => {
+export const forbidVoiceOver = (voiceover_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
-    url: '/api/certifier/saveOrUpdate',
+    url: '/api/over/saveOrUpdate',
     data: {
-      id: certifier_id,
+      id: voiceover_id,
       status: 'DISABLE',
     },
   })
 }
+
 export const TopIteams = () => {
   return request<Common<TopItem[]>>({
     method: 'GET',
-    url: '/api/certifier/TopIteams',
+    url: '/api/over/TopIteams',
   }).catch((error) => {
     console.error('获取菜单信息失败', error)
     throw new Error('获取菜单信息失败')

@@ -44,15 +44,19 @@ createTimeRangeWatcher(queryCondition)(timeRange)
       </div>
     </template>
     <el-table :data="queriedResult.records" border style="width: 100%">
-      <el-table-column type="index" label="序号" width="180" align="center" />
+      <el-table-column type="index" label="序号" width="70" align="center" />
       <el-table-column prop="shorthand" label="简称"  align="center" />
-      <el-table-column prop="alias" label="店铺名" align="center" />
-      <el-table-column prop="name" label="姓名" align="center" />
-      <el-table-column prop="Title" label="尊称" width="180" align="center" />
-      <el-table-column prop="email" label="邮箱" width="180" align="center" />
+      <el-table-column prop="sort" label="排序"  width="70"  align="center" />
+      <el-table-column prop="name" label="姓名" width="100"  align="center" />
+      <el-table-column prop="Title" label="尊称" width="100" align="center" />
+      <el-table-column prop="email" label="邮箱"  align="center" />
       <el-table-column prop="number" label="手机号"  align="center" />
+      <el-table-column prop="path" label="素材文件"  align="center" />
+      <el-table-column prop="clipSum" label="素材个数"  align="center" />
+      <el-table-column prop="scope" label="业务范围"  align="center" />
       <el-table-column prop="address" label="地址" align="center" />
       <el-table-column prop="note" label="备注" align="center" />
+      <el-table-column prop="alias" label="店铺名" align="center" />
       <el-table-column
         prop="createdTime"
         label="录入时间"

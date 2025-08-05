@@ -1,6 +1,7 @@
 import {
+  CreateIteams,
   saveOrUpdate,
-  getAccountPages,
+  getPages,
   deleteAccount,
   enableAccount, forbidAccount,
   type QueryCondition,
@@ -22,7 +23,7 @@ export const queriedResult = ref({} as QueryResult)
 const distext = ref('账号')
 export const queryAccount = async (params?: QueryCondition) => {
   Object.assign(queryCondition.value, params)
-  const { data } = await getAccountPages(queryCondition.value)
+  const { data } = await getPages(queryCondition.value)
   if (data.code === '000000') {
     queriedResult.value = data.data
     console.log(`${distext.value}列表数据`, data.data) // 添加打印数据
@@ -47,14 +48,14 @@ export const msgText = ref('')
 const isCreate = ref(true)
 const formInitialValues = {
   id: 0,
-  AccountTeamId: -1,
-  PlatformId: -1,
+  AccountTeam_id: -1,
+  Platform_id: -1,
   name: '',
   number: '',
   password: '',
   profile: '',
-  PNumberId: -1,
-  CertifierId: -1,
+  PNumber_id: -1,
+  Certifier_id: -1,
   note: '',
 }
 export const form = reactive({...formInitialValues})
@@ -90,3 +91,16 @@ export const onSubmit = async () => {
   }
 }
 
+
+
+
+export const createIteams = async () => {
+  const { data } = await CreateIteams()
+  if (data.code === '000000') {
+    ElMessage.success('刷新任务成功')
+    queryAccount()
+  } else {
+    ElMessage.error('刷新任务失败')
+    throw new Error('刷新任务失败')
+  }
+}

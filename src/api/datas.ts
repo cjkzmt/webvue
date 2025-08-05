@@ -2,23 +2,24 @@ import request from '@/utils/request'
 import type {Common ,Result,Condition} from '@/utils/QueryResult'
 
 export type QueryCondition = Partial<Condition&{
-  AiApi_id: number
-  PNumber_id: number
+  number: number
 }>
 
-type InItem = {
-  id: number
-  AiApi_id: number
-  PNumber_id: number
-  token: string
-  status: string}
 
-type Item =InItem& {
-  createdTime: string
-  AiApi: string
-  PNumber: number
-  AiApiname: string
-  PNumberOwner: string
+type Item = {
+  id: number
+  Script_id :number
+  Account_id :number
+  title: string
+  publishtime : string
+  views:number
+  completion:number
+  comment:number
+  like:number
+  fav:number
+  followers:number
+  share:number
+  watch:number
   status: 'ENABLE' | 'DISABLE'}
 
 export type QueryResult = Result<Item[]>
@@ -26,16 +27,16 @@ export type QueryResult = Result<Item[]>
 export const getPages = (queryCondition: QueryCondition = {}) => {
   return request<Common<QueryResult>>({
     method: 'POST',
-    url: '/api/apitoken/getPages',
+    url: '/api/data/getPages',
     data: queryCondition,
   })
 }
 
-type CreateOrEnditapitoken = Partial<InItem>
-export const saveOrUpdate = (data: CreateOrEnditapitoken) => {
+type CreateOrEnditdata = Partial<Item>
+export const saveOrUpdate = (data: CreateOrEnditdata) => {
   return request<Common<boolean>>({
     method: 'POST',
-    url: '/api/apitoken/saveOrUpdate',
+    url: '/api/data/saveOrUpdate',
     data,
   }).catch((error) => {
     console.error('操作失败', error)
@@ -43,33 +44,33 @@ export const saveOrUpdate = (data: CreateOrEnditapitoken) => {
   })
 }
 
-export const deleteApiToken = (id: number) => {
+export const deleteData = (id: number) => {
   return request<Common<boolean>>({
     method: 'DELETE',
-    url: `/api/apitoken/${id}`,
+    url: `/api/data/${id}`,
   }).catch((error) => {
-    console.error('删除电脑信息失败', error)
-    throw new Error('删除电脑信息失败')
+    console.error('删除手机信息失败', error)
+    throw new Error('删除手机信息失败')
   })
 }
 
-export const enableApiToken = (apitoken_id: number) => {
+export const enableData = (id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
-    url: '/api/apitoken/saveOrUpdate',
+    url: '/api/data/saveOrUpdate',
     data: {
-      id: apitoken_id,
+      id: id,
       status: 'ENABLE',
     },
   })
 }
 
-export const forbidApiToken = (apitoken_id: number) => {
+export const forbidData = (id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
-    url: '/api/apitoken/saveOrUpdate',
+    url: '/api/data/saveOrUpdate',
     data: {
-      id: apitoken_id,
+      id: id,
       status: 'DISABLE',
     },
   })

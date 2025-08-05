@@ -21,7 +21,7 @@ const handleLogout = async () => {
   })
   await logout().catch(() => {})
   ElMessage.success('退出成功')
-  useTokenStore().saveToken()
+  useTokenStore().saveToken('')
   router.push({ name: 'login' })
 }
 </script>

@@ -10,6 +10,7 @@ type CommonReturn<T = string> = {
   state: number
   content: T}
 type LoginResult = CommonReturn
+
 type UserInfo = CommonReturn<{
   isUpdatePassword: boolean
   portrait: string
@@ -81,10 +82,10 @@ export const refreshToken = () => {
   return promiseRT
 }
 
-export const getUserPages = (queryCondition: QueryCondition = {}) => {
+export const getPages = (queryCondition: QueryCondition = {}) => {
   return request<Common<QueryResult>>({
     method: 'POST',
-    url: '/api/user/getUserPages',
+    url: '/api/user/getPages',
     data: queryCondition,
   })
 }

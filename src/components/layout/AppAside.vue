@@ -6,16 +6,19 @@ import { isCollapse } from './isCollapse'
   <el-aside>
     <el-scrollbar>
       <el-menu router unique-opened :collapse="isCollapse">
-        <el-menu-item>
+        <el-menu-item  index="0">
           <a href="/" class="logo">
             <img src="@/assets/logo.svg" />
             <h1>新媒体大师</h1>
-          </a></el-menu-item>
+          </a>
+        </el-menu-item>
         <el-sub-menu index="1">
           <template #title>
             <el-icon><IEpDataLine /></el-icon><span>项目数据</span>
           </template>
           <el-menu-item-group>
+
+            <el-menu-item index="/datas">视频数据</el-menu-item>
             <el-menu-item index="/leads">意向用户</el-menu-item>
             <el-menu-item index="/fans">粉丝数据</el-menu-item>
           </el-menu-item-group>

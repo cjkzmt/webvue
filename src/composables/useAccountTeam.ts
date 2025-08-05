@@ -1,12 +1,15 @@
 import {
   saveOrUpdate,
-  getAccountTeamPages,
+  getPages,
   deleteAccountTeam,
   enableAccountTeam,
   forbidAccountTeam,
+  TopIteams,
   type QueryCondition,
   type QueryResult,
+  type TopItem
 } from '@/api/accountteams'
+import {createHandler ,createDeleteHandler } from '@/utils/Common'
 import { reactive, ref } from 'vue'
 import { ElMessage} from 'element-plus'
 import { type FormInstance } from 'element-plus'
@@ -16,9 +19,11 @@ const formInitialValues = {
   number: 0,
   scope: '',
   Phone_id: 0,
-  TypeVideo_id: 0,
-  TypeCover_id: 0,
-  TypeSubtitle_id: 0,
+  Computer_id: 0,
+  TypeVideo_id: 1,
+  TypeCover_id: 1,
+  TypeSubtitle_id: 1,
+  TeamOwner_id: 0,
 }
 export const form = reactive({...formInitialValues})
 
@@ -37,7 +42,7 @@ export const queriedResult = ref({} as QueryResult)
 //动作
 export const queryAccountTeam = async (params?: QueryCondition) => {
   Object.assign(queryCondition.value, params)
-  const { data } = await getAccountTeamPages(queryCondition.value)
+  const { data } = await getPages(queryCondition.value)
   if (data.code === '000000') {
     queriedResult.value = data.data
     console.log(`${distext.value}列表数据`, data.data) // 添加打印数据
@@ -48,7 +53,6 @@ export const queryAccountTeam = async (params?: QueryCondition) => {
 }
 
 
-import {createHandler ,createDeleteHandler } from '@/utils/Common'
 export const handleDelete = createDeleteHandler({
   deleteFn: deleteAccountTeam,
   refresh: queryAccountTeam,
@@ -59,17 +63,16 @@ export const handleStatusChange = createHandler(
   forbidAccountTeam,
   queryAccountTeam
 )
-import { getTopAccountTeams, type TopAccountTeams } from '@/api/accountteams'
-export const topAccountTeams = ref([] as TopAccountTeams[])
+
+export const topAccountTeams = ref([] as TopItem[])
 export const fetchTopAccountTeams = async () => {
   try {
-    const { data } = await getTopAccountTeams()
+    const { data } = await TopIteams()
     topAccountTeams.value = data.data
   } catch (error) {
     console.error(`获取${distext.value}列表失败`, error)
   }
 }
-
 
 export const initAndShow = (id = 0) => {
   if (id) {

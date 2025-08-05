@@ -87,7 +87,7 @@ const dlgCreateOrEdit = ref<InstanceType<typeof DlgScriptCreateOrEdit>>()
       <!-- <el-table-column type="index" label="序号" width="60" align="center" /> -->
       <!-- <el-table-column prop="VideoTemplate" label="预设模板" width="100" align="center" /> -->
       <el-table-column prop="id" label="ID" width="60" align="center" />
-      <el-table-column prop="TemplateId" label="编号" width="120" align="center" />
+      <el-table-column prop="Templatenum" label="编号" width="120" align="center" />
       <!-- <el-table-column prop="AccountTeam" label="发布组" width="70" align="center" /> -->
       <el-table-column prop="line" label="字幕文案" align="center" />
       <el-table-column prop="covercopy" label="封面文案" width="100" align="center" />
@@ -97,8 +97,8 @@ const dlgCreateOrEdit = ref<InstanceType<typeof DlgScriptCreateOrEdit>>()
       <el-table-column prop="displaysubtitles" label="显示字幕" width="100" align="center" />
       <el-table-column prop="subtitlepronunciation" label="字幕读音" width="100" align="center" />
       <el-table-column prop="Font" label="字体" width="100" align="center" />
-      <el-table-column prop="Music" label="背景音乐" width="100" align="center" />
-      <el-table-column prop="VoiceOver" label="视频配音" width="100" align="center" />
+      <el-table-column prop="Music" label="背景音乐" width="200" align="center" />
+      <el-table-column prop="Over" label="视频配音" width="300" align="center" />
       <!-- <el-table-column
         prop="createdTime"
         label="注册时间"

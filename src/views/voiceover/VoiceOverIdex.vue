@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { queriedResult, queryCondition, queryVoiceOver, handleDelete,handleStatusChange } from '@/composables/useVoiceOver'
+import { queriedResult, queryCondition, queryVoiceOver, handleDelete,handleStatusChange } from '@/composables/useOver'
 import { timeFormatter } from '@/utils/timeHandler'
 import { ref } from 'vue'
 import DlgPCCreateOrEdit from './DlgVoiceOverCreateOrEdit.vue'

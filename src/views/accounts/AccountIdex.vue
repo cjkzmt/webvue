@@ -3,7 +3,7 @@
 
 import { timeFormatter } from '@/utils/timeHandler'
 import { ref} from 'vue'
-import { queriedResult, queryCondition, queryAccount, handleDelete ,handleStatusChange} from '@/composables/useAccount'
+import { queriedResult, queryCondition, queryAccount, handleDelete ,handleStatusChange,createIteams} from '@/composables/useAccount'
 import DlgAccountCreateOrEdit from './DlgAccountCreateOrEdit.vue'
 queryAccount()
 const dlgCreateOrEdit = ref<InstanceType<typeof DlgAccountCreateOrEdit>>()
@@ -36,23 +36,33 @@ createTimeRangeWatcher(queryCondition)(timeRange)
             <el-button type="primary" @click="queryAccount({ currentPage: 1 })">查询</el-button>
           </el-form-item>
         </el-form>
-        <el-button
-          class="Createbutton"
-          style="margin-top: -19px"
-          type="primary"
-          @click="dlgCreateOrEdit?.initAndShow()"
-          >添加账号</el-button
-        >
+    <div style="margin-left: auto; display: flex; gap: 10px;">
+      <el-button
+        class="Createbutton"
+        style="margin-top: -19px"
+        type="primary"
+        @click="createIteams()"
+        >批量添加账号</el-button
+      >
+      <el-button
+        class="Createbutton"
+        style="margin-top: -19px"
+        type="primary"
+        @click="dlgCreateOrEdit?.initAndShow()"
+        >添加账号</el-button
+      >
+    </div>
       </div>
     </template>
     <el-table :data="queriedResult.records" border style="width: 100%">
       <el-table-column type="index" label="序号" width="60" align="center" />
+      <el-table-column prop="shorthand" label="所属店" width="110" align="center" />
       <el-table-column prop="AccountTeam" label="组号" width="60" align="center" />
       <el-table-column prop="Platform" label="平台" width="80" align="center" />
-      <el-table-column prop="name" label="账号名" width="180" align="center" />
+      <el-table-column prop="name" label="账号名"  align="center" />
       <el-table-column prop="number" label="ID号" width="180" align="center" />
-      <el-table-column prop="profile" label="简介" width="180" align="center" />
-      <el-table-column prop="PNumber" label="手机号" width="180" align="center" />
+      <el-table-column prop="profile" label="简介" align="center" />
+      <el-table-column prop="PNumber" label="手机号" align="center" />
       <el-table-column prop="Certifier" label="认证人" width="80" align="center" />
       <el-table-column prop="note" label="备注" width="180" align="center" />
       <el-table-column
@@ -74,20 +84,20 @@ createTimeRangeWatcher(queryCondition)(timeRange)
         />
       </el-table-column>
 
-      <el-table-column label="操作" align="center" v-slot="{ row }">
+      <el-table-column label="操作" width="180" align="center" v-slot="{ row }">
         <el-button type="primary" @click="dlgCreateOrEdit?.initAndShow(row.id)">编辑</el-button>
         <el-button type="danger" @click="handleDelete(row.id)">删除</el-button>
       </el-table-column>
     </el-table>
-    <el-pagination
+     <el-pagination
       v-model:current-page="queriedResult.current"
       v-model:page-size="queriedResult.size"
       :page-sizes="[30, 80, 150, 200]"
-      :background="true"
+      background
       layout="total, sizes, prev, pager, next, jumper"
       :total="queriedResult.total"
-      @size-change="(pageSize: number) => queryAccount({ pageSize, currentPage: 1 })"
-      @current-change="(currentPage: number) => queryAccount({ currentPage })"
+      @update:current-page="(currentPage: number) => queryAccount({ currentPage })"
+      @update:page-size="(pageSize: number) => queryAccount({ pageSize, currentPage: 1 })"
     />
     <DlgAccountCreateOrEdit ref="dlgCreateOrEdit" />
   </el-card>

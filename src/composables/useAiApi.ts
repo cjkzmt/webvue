@@ -1,9 +1,9 @@
-import { getAll, saveOrUpdate, deleteAiApi, type AiApiItem } from '@/api/aiapis'
+import { getAll, saveOrUpdate, deleteAiApi, type Item } from '@/api/aiapis'
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
 const distext = ref('AI')
 //保存数据
-export const allAiApi = ref([] as AiApiItem[])
+export const allAiApi = ref([] as Item[])
 //获取所有AI
 export const getAllAiApi = async () => {
   const { data } = await getAll()

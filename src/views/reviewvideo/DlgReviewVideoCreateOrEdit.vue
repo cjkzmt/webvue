@@ -11,7 +11,7 @@ const formLabelWidth = '140px'
 defineExpose({initAndShow})
 import { topFonts, fetchTopFonts } from '@/composables/useFont'
 fetchTopFonts()
-import { topVoiceOvers, fetchTopVoiceOvers } from '@/composables/useVoiceOver'
+import { topVoiceOvers, fetchTopVoiceOvers } from '@/composables/useOver'
 fetchTopVoiceOvers()
 import { topMusics, fetchTopMusics } from '@/composables/useMusic'
 fetchTopMusics()
@@ -21,23 +21,23 @@ fetchTopAccountTeams()
 <template>
   <el-dialog v-model="dialogFormVisible" :title="msgText + '脚本'" width="1500">
     <el-form :model="form" ref="forminstance">
-      <el-form-item label="封面文案" :label-width="formLabelWidth" prop="covercopy">
-        <el-input v-model="form.covercopy" autocomplete="off"  type="textarea" :rows="2" />
+      <el-form-item label="封面文案" :label-width="formLabelWidth" prop="cover">
+        <el-input v-model="form.cover" autocomplete="off"  type="textarea" :rows="2" />
       </el-form-item>
-      <el-form-item label="字幕文案" :label-width="formLabelWidth" prop="subtitlecopy">
-        <el-input v-model="form.subtitlecopy" autocomplete="off"  type="textarea" :rows="5"  />
+      <el-form-item label="字幕文案" :label-width="formLabelWidth" prop="line">
+        <el-input v-model="form.line" autocomplete="off"  type="textarea" :rows="5"  />
       </el-form-item>
-      <el-form-item label="显示文案" :label-width="formLabelWidth" prop="displaysubtitles">
-        <el-input v-model="form.displaysubtitle" autocomplete="off"  type="textarea" :rows="5" />
+      <el-form-item label="显示文案" :label-width="formLabelWidth" prop="subtitle">
+        <el-input v-model="form.subtitle" autocomplete="off"  type="textarea" :rows="5" />
       </el-form-item>
-      <el-form-item label="字幕读音" :label-width="formLabelWidth" prop="subtitlepronunciation">
-        <el-input v-model="form.pronunciation" autocomplete="off" type="textarea" :rows="5"  />
+      <el-form-item label="字幕读音" :label-width="formLabelWidth" prop="reading">
+        <el-input v-model="form.reading" autocomplete="off" type="textarea" :rows="5"  />
       </el-form-item>
       <el-form-item label="视频描述" :label-width="formLabelWidth" prop="title">
         <el-input v-model="form.title" autocomplete="off" type="textarea" :rows="1"  />
       </el-form-item>
-      <el-form-item label="视频封面标题" :label-width="formLabelWidth" prop="covercopy">
-        <el-input v-model="form.covercopy" autocomplete="off" type="textarea" :rows="1"  />
+      <el-form-item label="视频封面标题" :label-width="formLabelWidth" prop="cover">
+        <el-input v-model="form.cover" autocomplete="off" type="textarea" :rows="1"  />
       </el-form-item>
         <el-form-item label="发布日期" :label-width="formLabelWidth" prop="publishtime">
           <el-date-picker
@@ -49,8 +49,8 @@ fetchTopAccountTeams()
       <el-form-item label="视频文件名" :label-width="formLabelWidth" prop="videoname">
         <el-input v-model="form.videoname" autocomplete="off" type="textarea" :rows="1"  />
       </el-form-item>
-      <el-form-item label="字体" :label-width="formLabelWidth"  prop="FontId">
-        <el-select v-model="form.FontId" placeholder="请选择所在手机">
+      <el-form-item label="字体" :label-width="formLabelWidth"  prop="Font_id">
+        <el-select v-model="form.Font_id" placeholder="请选择所在手机">
           <el-option label="未知" :value="-1" />
           <el-option
             v-for="Font in topFonts"
@@ -60,8 +60,8 @@ fetchTopAccountTeams()
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="账号组" :label-width="formLabelWidth"  prop="AccountTeamId">
-        <el-select v-model="form.AccountTeamId" placeholder="请选择账号组">
+      <el-form-item label="账号组" :label-width="formLabelWidth"  prop="AccountTeam_id">
+        <el-select v-model="form.AccountTeam_id" placeholder="请选择账号组">
           <el-option label="未知" :value="-1" />
           <el-option
             v-for="Team in topAccountTeams"
@@ -71,8 +71,8 @@ fetchTopAccountTeams()
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="背景音乐" :label-width="formLabelWidth"  prop="MusicId">
-        <el-select v-model="form.MusicId" placeholder="请选择所在平台">
+      <el-form-item label="背景音乐" :label-width="formLabelWidth"  prop="Music_id">
+        <el-select v-model="form.Music_id" placeholder="请选择所在平台">
           <el-option label="未知" :value="-1" />
           <el-option
             v-for="Music in topMusics"
@@ -82,8 +82,8 @@ fetchTopAccountTeams()
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="配音" :label-width="formLabelWidth" prop="VoiceOverId">
-        <el-select v-model="form.VoiceOverId" placeholder="请选择绑定手机号">
+      <el-form-item label="配音" :label-width="formLabelWidth" prop="VoiceOver_id">
+        <el-select v-model="form.VoiceOver_id" placeholder="请选择绑定手机号">
           <el-option label="未知" :value="-1" />
           <el-option
             v-for="VoiceOver in topVoiceOvers"

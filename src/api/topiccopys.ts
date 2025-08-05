@@ -1,38 +1,37 @@
 import request from '@/utils/request'
-import type {Common ,Result} from '@/utils/QueryResult'
+import type {Common ,Result,Condition} from '@/utils/QueryResult'
+export type QueryCondition = Partial<Condition&{
+  TypeText_id: number
+}>
 
-type topiccopyItem = {
+type InItem = {
   id: number
   text: string
   url: string
-  AuthorId: number
-  Author:string
-  TypeTextId:number
+  Author_id: number
+  TypeText_id:number
   TypeText: string
   topicnum:number
   copynum:number
+
+}
+
+type Item = InItem&{
+  Author:string
   createdTime: string
   status: 'ENABLE' | 'DISABLE'
 }
-export type QueryResult = Result<topiccopyItem[]>
-export type QueryCondition = Partial<{
-  currentPage: number // 查询的当前页码
-  pageSize: number // 每页显示的记录数
-  TopicCopyId: string
-  TypeTextId: number
-  status: string
-  statCreateTime: string // 开始创建时间，用于筛选创建时间范围的起始时间
-  endCreateTime: string // 结束创建时间，用于筛选创建时间范围的结束时间
-}>
-export const getTopicCopyPages = (queryCondition: QueryCondition = {}) => {
+export type QueryResult = Result<Item[]>
+
+export const getPages = (queryCondition: QueryCondition = {}) => {
   return request<Common<QueryResult>>({
     method: 'POST',
-    url: '/api/topiccopy/getTopicCopyPages',
+    url: '/api/topiccopy/getPages',
     data: queryCondition,
   })
 }
 
-type CreateOrEndittopiccopy = Partial<topiccopyItem>
+type CreateOrEndittopiccopy = Partial<InItem>
 export const saveOrUpdate = (data: CreateOrEndittopiccopy) => {
   return request<Common<boolean>>({
     method: 'POST',
@@ -54,23 +53,23 @@ export const deleteTopicCopy = (id: number) => {
   })
 }
 
-export const enableTopicCopy = (topiccopyId: number) => {
+export const enableTopicCopy = (topiccopy_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/topiccopy/saveOrUpdate',
     data: {
-      id: topiccopyId,
+      id: topiccopy_id,
       status: 'ENABLE',
     },
   })
 }
 
-export const forbidTopicCopy = (topiccopyId: number) => {
+export const forbidTopicCopy = (topiccopy_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/topiccopy/saveOrUpdate',
     data: {
-      id: topiccopyId,
+      id: topiccopy_id,
       status: 'DISABLE',
     },
   })

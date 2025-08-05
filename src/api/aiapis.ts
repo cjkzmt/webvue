@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 import type {Common } from '@/utils/QueryResult'
-export type AiApiItem = {
+export type Item = {
   id: number
   name: string
   description: string
@@ -12,7 +12,7 @@ export type AiApiItem = {
   createdTime: string}
 
 export const getAll = () => {
-  return request<Common<AiApiItem[]>>({
+  return request<Common<Item[]>>({
     method: 'GET',
     url: '/api/aiapi/getAll',
   }).catch((error) => {
@@ -21,7 +21,7 @@ export const getAll = () => {
   })
 }
 
-export type CreateOrEnditaiapi = Partial<AiApiItem>
+export type CreateOrEnditaiapi = Partial<Item>
 export const saveOrUpdate = (aiapiInfo: CreateOrEnditaiapi) => {
   return request<Common<boolean>>({
     method: 'POST',

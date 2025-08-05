@@ -18,8 +18,8 @@ fetchTopPNumbers()
 <template>
   <el-dialog v-model="dialogFormVisible" :title="msgText + 'Token'" width="500">
     <el-form :model="form" ref="forminstance">
-      <el-form-item label="所属AI" :label-width="formLabelWidth" prop="AiApiId">
-        <el-select v-model="form.AiApiId" placeholder="请选择所属AI">
+      <el-form-item label="所属AI" :label-width="formLabelWidth" prop="AiApi_id">
+        <el-select v-model="form.AiApi_id" placeholder="请选择所属AI">
           <el-option label="未知" :value="-1" />
           <el-option
             v-for="AiApi in allAiApi"
@@ -29,8 +29,8 @@ fetchTopPNumbers()
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="绑定手机号" :label-width="formLabelWidth" prop="PNumberId">
-        <el-select v-model="form.PNumberId" placeholder="请选择绑定手机号">
+      <el-form-item label="绑定手机号" :label-width="formLabelWidth" prop="PNumber_id">
+        <el-select v-model="form.PNumber_id" placeholder="请选择绑定手机号">
           <el-option label="未知" :value="-1" />
           <el-option
             v-for="ApiTokenTeam in topPNumbers"

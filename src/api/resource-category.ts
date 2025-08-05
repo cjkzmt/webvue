@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 import type {Common } from '@/utils/QueryResult'
 
-export type ResourceCategory = {
+export type Item = {
   id: number
   name: string
-  operatorId: number | null
+  operator_id: number | null
   selected: boolean
   sort: number
   createdBy: string
@@ -13,12 +13,12 @@ export type ResourceCategory = {
   updatedTime: string | null
 }
 export const getAll = () => {
-  return request<Common<ResourceCategory[]>>({
+  return request<Common<Item[]>>({
     method: 'GET',
     url: '/api/resource/category/getAll',
   })
 }
-type ResourceCategoryprams = Pick<ResourceCategory, 'name' | 'sort'> & {
+type ResourceCategoryprams = Pick<Item, 'name' | 'sort'> & {
   id?: number
 }
 //保存或更新资源类别

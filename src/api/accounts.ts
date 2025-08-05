@@ -1,44 +1,49 @@
 import request from '@/utils/request'
-import type {Common ,Result} from '@/utils/QueryResult'
-type accountItem = {
+import type {Common ,Result,Condition} from '@/utils/QueryResult'
+
+export type QueryCondition = Partial<Condition&{
+  PNumber_id: number
+  Phone_id: number
+  Platform_id: number
+}>
+
+type OutItem = {
   id: number
-  AccountTeamId: number
-  AccountTeam: number
-  PlatformId: number
-  Platform: string
+  AccountTeam_id: number
+  Platform_id: number
   name: string
   number: string
-  isDel: boolean
   password: string
   profile: string
-  PNumberId: number
+  PNumber_id: number
+  Certifier_id: number
+  note:string
+
+}
+
+type Item = OutItem&{
+  shorthand: string
+  isDel: boolean
+  AccountTeam: number
+  Platform: string
+  createdTime:string
+  updatedTime:string
   PNumber: number
-  CertifierId: number
   Certifier: string
   status: 'ENABLE' | 'DISABLE'
-  note: string
-  updatedTime: string
-  createdTime: string
 }
-export type QueryResult = Result<accountItem[]>
-export type QueryCondition = Partial<{
-  currentPage: number
-  pageSize: number
-  PlatformId: number
-  AccountId: number
-  PNumberId: number
-  PhoneId: number
-  statCreateTime: string
-  endCreateTime: string
-}>
-export const getAccountPages = (queryCondition: QueryCondition = {}) => {
+
+export type QueryResult = Result<Item[]>
+
+
+export const getPages = (queryCondition: QueryCondition = {}) => {
   return request<Common<QueryResult>>({
     method: 'POST',
-    url: '/api/account/getAccountPages',
+    url: '/api/account/getPages',
     data: queryCondition,
   })
 }
-type CreateOrEnditaccount = Partial<accountItem>
+type CreateOrEnditaccount = Partial<OutItem>
 export const saveOrUpdate = (data: CreateOrEnditaccount) => {
   return request<Common<boolean>>({
     method: 'POST',
@@ -49,33 +54,44 @@ export const saveOrUpdate = (data: CreateOrEnditaccount) => {
     throw new Error('操作失败')
   })
 }
-export const deleteAccount = (accountId: number) => {
+export const deleteAccount = (account_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/account/saveOrUpdate',
     data: {
-      id: accountId,
+      id: account_id,
       isDel: true,
     },
   })
 }
-export const enableAccount = (accountId: number) => {
+export const enableAccount = (account_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/account/saveOrUpdate',
     data: {
-      id: accountId,
+      id: account_id,
       status: 'ENABLE',
     },
   })
 }
-export const forbidAccount = (accountId: number) => {
+export const forbidAccount = (account_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/account/saveOrUpdate',
     data: {
-      id: accountId,
+      id: account_id,
       status: 'DISABLE',
     },
   })
 }
+
+
+
+
+export const CreateIteams = () => {
+  return request<Common<boolean>>({
+    method: 'POST',
+    url: '/api/account/CreateIteams',
+  })
+}
+

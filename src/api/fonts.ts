@@ -1,26 +1,23 @@
 import request from '@/utils/request'
-import type {Common ,Result} from '@/utils/QueryResult'
-export type TopFonts = {
+import type {Common ,Result,Condition} from '@/utils/QueryResult'
+export type QueryCondition = Partial<Condition&{name: string}>
+export type TopItem = {
   id: number
   name: string}
-type fontItem = TopFonts&{
-  url: string
+type InItem = TopItem&{url: string}
+
+type Item = InItem&{
   createdTime: string
   status: 'ENABLE' | 'DISABLE'}
-export type QueryResult = Result<fontItem[]>
-type CreateOrEnditfont = Partial<fontItem>
-export type QueryCondition = Partial<{
-  currentPage: number // 查询的当前页码
-  pageSize: number // 每页显示的记录数
-  status: string // 电话号码查询条件，用于筛选电话号码匹配的电脑
-  FontId: number // 电脑ID查询条件，用于筛选特定电脑ID的电脑
-  statCreateTime: string // 开始创建时间，用于筛选创建时间范围的起始时间
-  endCreateTime: string // 结束创建时间，用于筛选创建时间范围的结束时间
-}>
-export const getFontPages = (queryCondition: QueryCondition = {}) => {
+
+export type QueryResult = Result<Item[]>
+
+type CreateOrEnditfont = Partial<InItem>
+
+export const getPages = (queryCondition: QueryCondition = {}) => {
   return request<Common<QueryResult>>({
     method: 'POST',
-    url: '/api/font/getFontPages',
+    url: '/api/font/getPages',
     data: queryCondition,
   })
 }
@@ -43,30 +40,30 @@ export const deleteFont = (id: number) => {
     throw new Error('删除电脑信息失败')
   })
 }
-export const enableFont = (fontId: number) => {
+export const enableFont = (font_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/font/saveOrUpdate',
     data: {
-      id: fontId,
+      id: font_id,
       status: 'ENABLE',
     },
   })
 }
-export const forbidFont = (fontId: number) => {
+export const forbidFont = (font_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/font/saveOrUpdate',
     data: {
-      id: fontId,
+      id: font_id,
       status: 'DISABLE',
     },
   })
 }
-export const getTopFonts = () => {
-  return request<Common<TopFonts[]>>({
+export const TopIteams = () => {
+  return request<Common<TopItem[]>>({
     method: 'GET',
-    url: '/api/font/TopFonts',
+    url: '/api/font/TopIteams',
   }).catch((error) => {
     console.error('获取菜单信息失败', error)
     throw new Error('获取菜单信息失败')

@@ -56,6 +56,11 @@ const router = createRouter({
           component: () => import('@/views/authors/AuthorIdex.vue'),
         },
         {
+          path: '/datas',
+          name: 'datas',
+          component: () => import('@/views/data/DataIdex.vue'),
+        },
+        {
           path: '/fonts',
           name: 'fonts',
           component: () => import('@/views/font/FontIdex.vue'),

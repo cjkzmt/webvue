@@ -29,7 +29,7 @@ fetchTopPhones()
         <el-input v-model="form.rent" autocomplete="off" />
       </el-form-item>
       <el-form-item label="所在手机" :label-width="formLabelWidth">
-        <el-select v-model="form.PhoneId" placeholder="请选择所在手机">
+        <el-select v-model="form.Phone_id" placeholder="请选择所在手机">
           <el-option label="未在手机" :value="-1" />
           <el-option
             v-for="Phone in topPhones"

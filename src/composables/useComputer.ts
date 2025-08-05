@@ -1,9 +1,10 @@
 import {
   saveOrUpdate,
-  getComputerPages,
-  deleteComputer,enablecreatetext, forbidcreatetext,enablecreatevideo, forbidcreatevideo , enablepublishvideo, forbidpublishvideo,
+  getPages,
+  deleteComputer,enablecreatetext, forbidcreatetext,enablecreatevideo, forbidcreatevideo , enablepublishvideo, forbidpublishvideo,TopIteams,
   type QueryCondition,
   type QueryResult,
+  type TopItem,
 } from '@/api/computers'
 import {createHandler ,createDeleteHandler } from '@/utils/Common'
 import { reactive, ref } from 'vue'
@@ -47,7 +48,7 @@ export const queriedResult = ref({} as QueryResult)
 //动作
 export const queryComputer = async (params?: QueryCondition) => {
   Object.assign(queryCondition.value, params)
-  const { data } = await getComputerPages(queryCondition.value)
+  const { data } = await getPages(queryCondition.value)
   if (data.code === '000000') {
     queriedResult.value = data.data
     console.log('用户数据:', data.data) // 添加打印数据
@@ -67,12 +68,12 @@ export const onSubmit = async () => {
   }
 }
 import { enableComputer, forbidComputer } from '@/api/computers'
-export const handleStatusChange = async (act: 'ENABLE' | 'DISABLE', userId: number) => {
+export const handleStatusChange = async (act: 'ENABLE' | 'DISABLE', user_id: number) => {
   const action = {
     ENABLE: { msg: '启用', fn: enableComputer },
     DISABLE: { msg: '禁用', fn: forbidComputer },
   }
-  const { data } = await action[act].fn(userId)
+  const { data } = await action[act].fn(user_id)
   if (data.code === '000000') {
     ElMessage.success(`${action[act].msg}成功`)
     queryComputer()
@@ -99,3 +100,13 @@ export const handleDelete = createDeleteHandler({
   refresh: queryComputer,
   getDisplayName: () => distext.value
 })
+
+export const topComputer = ref([] as TopItem[])
+export const fetchTopComputer = async () => {
+  try {
+    const { data } = await TopIteams()
+    topComputer.value = data.data
+  } catch (error) {
+    console.error('获取手机列表失败:', error)
+  }
+}

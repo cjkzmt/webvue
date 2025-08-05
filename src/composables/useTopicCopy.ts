@@ -1,6 +1,6 @@
 import {
   saveOrUpdate,
-  getTopicCopyPages,
+  getPages,
   deleteTopicCopy,enableTopicCopy, forbidTopicCopy,
   type QueryCondition,
   type QueryResult,
@@ -15,7 +15,7 @@ const formInitialValues = {
   id: 0,
   text: '',
   url: '',
-  TypeTextId: -1,
+  TypeText_id: -1,
 }
 export const form = reactive({...formInitialValues})
 
@@ -57,7 +57,7 @@ export const queriedResult = ref({} as QueryResult)
 //动作
 export const queryTopicCopy = async (params?: QueryCondition) => {
   Object.assign(queryCondition.value, params)
-  const { data } = await getTopicCopyPages(queryCondition.value)
+  const { data } = await getPages(queryCondition.value)
   if (data.code === '000000') {
     queriedResult.value = data.data
     console.log('用户数据:', data.data) // 添加打印数据

@@ -16,3 +16,11 @@ export type Common<T> = {
   mesg: string
   time: string
 }
+export type Condition = {
+  currentPage: number
+  pageSize: number
+  id: number
+  status:string
+  statCreateTime: string
+  endCreateTime: string
+}

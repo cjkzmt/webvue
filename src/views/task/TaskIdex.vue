@@ -19,7 +19,7 @@ queryScript()
       </el-form-item>
       <el-form-item label="任务ID">
         <el-input
-          v-model="queryCondition.ScriptId"
+          v-model="queryCondition.id"
           placeholder="请输入任务ID"
           clearable
           oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^([2-9]|[1-9][0-9])$/, (match) => Math.min(28, match))"
@@ -82,10 +82,24 @@ queryScript()
           <span v-else>{{ row.videostatus }}</span> <!-- 其他情况直接显示原始值 -->
         </template>
       </el-table-column>
-      <el-table-column prop="douyin" label="抖音"  align="center" />
-      <el-table-column prop="sph" label="视频号"  align="center" />
-      <el-table-column prop="kuaishou" label="快手"  align="center" />
-      <el-table-column prop="xiaohongshu" label="小红书"  align="center" />
+      <el-table-column label="发布状态" align="center">
+        <template #default="{ row }">
+          <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 5px;">
+            <template v-for="(item) in row.publish" :key="item.id">
+              <div style="display: inline-flex; flex-direction: column; align-items: center; min-width: 60px;">
+                <div>{{ item.Platform }}</div>
+                <div >
+                  <span v-if="item.status === 'ENABLE'">已发布</span>
+                  <span v-else-if="item.status === 'DISABLE'">待发布</span>
+                  <span v-else>{{ item.status }}</span>
+                </div>
+              </div>
+              <!-- <div v-if="index < row.publish.length - 1" style="align-self: center;">|</div> -->
+            </template>
+          </div>
+        </template>
+      </el-table-column>
+
       <el-table-column prop="status" label="任务状态" align="center" />
       <el-table-column label="操作" align="center" width="90" v-slot="{ row }">
         <el-button type="danger" @click="handleDelete(row.id)">删除</el-button>

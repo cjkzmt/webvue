@@ -1,12 +1,12 @@
 import {
   saveOrUpdate,
-  getTeamOwnerPages,
+  getPages,
   deleteTeamOwner,
-  getTopTeamOwners, enableTeamOwner,
+  TopIteams, enableTeamOwner,
   forbidTeamOwner,
   type QueryCondition,
   type QueryResult,
-  type TopTeamOwners
+  type TopItem
 } from '@/api/teamowners'
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
@@ -16,6 +16,7 @@ const isCreate = ref(true)
 const formInitialValues = {
   id: 0,
   shorthand: '',
+  sort: 0,
   Title: '',
   email:'',
   name:  '',
@@ -23,6 +24,8 @@ const formInitialValues = {
   number: 1,
   address:  '',
   note: '',
+  path: '',
+  scope: '',
 }
 export const form = reactive({...formInitialValues})
 export const distext = '账号组'
@@ -64,7 +67,7 @@ export const queriedResult = ref({} as QueryResult)
 //动作
 export const queryTeamOwner = async (params?: QueryCondition) => {
   Object.assign(queryCondition.value, params)
-  const { data } = await getTeamOwnerPages(queryCondition.value)
+  const { data } = await getPages(queryCondition.value)
   if (data.code === '000000') {
     queriedResult.value = data.data
     console.log(`${distext}数据:`, data.data) // 添加打印数据
@@ -74,10 +77,10 @@ export const queryTeamOwner = async (params?: QueryCondition) => {
   }
 }
 
-export const topTeamOwners = ref([] as TopTeamOwners[])
-export const fetchTopTeamOwners = async () => {
+export const topTeamOwners = ref([] as TopItem[])
+export const fetchTeamOwners = async () => {
   try {
-    const { data } = await getTopTeamOwners()
+    const { data } = await TopIteams()
     topTeamOwners.value = data.data
   } catch (error) {
     console.error('获取手机列表失败:', error)

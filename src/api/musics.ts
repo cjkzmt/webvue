@@ -1,33 +1,31 @@
 import request from '@/utils/request'
-import type {Common ,Result} from '@/utils/QueryResult'
-export type TopMusics = {
+import type {Common ,Result,Condition} from '@/utils/QueryResult'
+export type QueryCondition = Partial<Condition&{
+  name: string
+}>
+export type TopItem = {
   id: number
   name: string
 }
-type musicItem = TopMusics& {
+type InItem = TopItem& {
   duration: number
   url: string
+}
+type Item = InItem& {
   createdTime: string
   status: 'ENABLE' | 'DISABLE'
 }
-export type QueryResult = Result<musicItem[]>
-export type QueryCondition = Partial<{
-  currentPage: number // 查询的当前页码
-  pageSize: number // 每页显示的记录数
-  status: string // 电话号码查询条件，用于筛选电话号码匹配的电脑
-  musicId: number // 电脑ID查询条件，用于筛选特定电脑ID的电脑
-  statCreateTime: string // 开始创建时间，用于筛选创建时间范围的起始时间
-  endCreateTime: string // 结束创建时间，用于筛选创建时间范围的结束时间
-}>
-export const getMusicPages = (queryCondition: QueryCondition = {}) => {
+export type QueryResult = Result<Item[]>
+
+export const getPages = (queryCondition: QueryCondition = {}) => {
   return request<Common<QueryResult>>({
     method: 'POST',
-    url: '/api/music/getMusicPages',
+    url: '/api/music/getPages',
     data: queryCondition,
   })
 }
 
-type CreateOrEnditmusic = Partial<musicItem>
+type CreateOrEnditmusic = Partial<InItem>
 export const saveOrUpdate = (data: CreateOrEnditmusic) => {
   return request<Common<boolean>>({
     method: 'POST',
@@ -49,32 +47,32 @@ export const deleteMusic = (id: number) => {
   })
 }
 
-export const enableMusic = (musicId: number) => {
+export const enableMusic = (music_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/music/saveOrUpdate',
     data: {
-      id: musicId,
+      id: music_id,
       status: 'ENABLE',
     },
   })
 }
 
-export const forbidMusic = (musicId: number) => {
+export const forbidMusic = (music_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/music/saveOrUpdate',
     data: {
-      id: musicId,
+      id: music_id,
       status: 'DISABLE',
     },
   })
 }
 
-export const getTopMusics = () => {
-  return request<Common<TopMusics[]>>({
+export const TopIteams = () => {
+  return request<Common<TopItem[]>>({
     method: 'GET',
-    url: '/api/music/TopMusics',
+    url: '/api/music/TopIteams',
   }).catch((error) => {
     console.error('获取菜单信息失败', error)
     throw new Error('获取菜单信息失败')

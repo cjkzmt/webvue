@@ -15,7 +15,7 @@ getMenuInfoById(route.params.id as unknown as number)
       <el-input v-model="form.href" />
     </el-form-item>
     <el-form-item label="上级菜单">
-      <el-select v-model="form.parentId" placeholder="请选择上级菜单">
+      <el-select v-model="form.parent_id" placeholder="请选择上级菜单">
         <el-option label="顶层菜单" :value="-1" />
         <el-option v-for="menu in topMenus" :key="menu.id" :label="menu.name" :value="menu.id" />
       </el-select>

@@ -1,31 +1,32 @@
 import request from '@/utils/request'
-import type {Common ,Result} from '@/utils/QueryResult'
-
-type OllamaItem = {
-  id: number // 手机的唯一标识符（手机ID）
-  urlId: number
-  url: string
+import type {Common ,Result,Condition} from '@/utils/QueryResult'
+export type QueryCondition = Partial<Condition&{
   model:string
-  status: 'ENABLE' | 'DISABLE' // 手机的状态，取值为 "ENABLE" 或 "DISABLE"
-}
-export type QueryResult = Result<OllamaItem[]>
-
-export type QueryCondition = Partial<{
-  currentPage: number // 查询的当前页码
-  pageSize: number // 每页显示的记录数
-  OllamaId: number // 手机ID查询条件，用于筛选特定手机ID的手机
-  statCreateTime: string // 开始创建时间，用于筛选创建时间范围的起始时间
-  endCreateTime: string // 结束创建时间，用于筛选创建时间范围的结束时间
 }>
-export const getOllamaPages = (queryCondition: QueryCondition = {}) => {
+
+type InItem = {
+  id: number
+  url_id: number
+  url: string
+}
+
+type Item = InItem&{
+  model:string
+  status: 'ENABLE' | 'DISABLE'
+}
+
+export type QueryResult = Result<Item[]>
+
+
+export const getPages = (queryCondition: QueryCondition = {}) => {
   return request<Common<QueryResult>>({
     method: 'POST',
-    url: '/api/ollama/getOllamaPages',
+    url: '/api/ollama/getPages',
     data: queryCondition,
   })
 }
 
-type CreateOrEnditOllama = Partial<OllamaItem>
+type CreateOrEnditOllama = Partial<InItem>
 export const saveOrUpdate = (data: CreateOrEnditOllama) => {
   return request<Common<boolean>>({
     method: 'POST',
@@ -47,23 +48,23 @@ export const deleteOllama = (id: number) => {
   })
 }
 
-export const enableOllama = (OllamaId: number) => {
+export const enableOllama = (Ollama_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/ollama/saveOrUpdate',
     data: {
-      id: OllamaId,
+      id: Ollama_id,
       status: 'ENABLE',
     },
   })
 }
 
-export const forbidOllama = (OllamaId: number) => {
+export const forbidOllama = (Ollama_id: number) => {
   return request<Common<boolean>>({
     method: 'POST',
     url: '/api/ollama/saveOrUpdate',
     data: {
-      id: OllamaId,
+      id: Ollama_id,
       status: 'DISABLE',
     },
   })
